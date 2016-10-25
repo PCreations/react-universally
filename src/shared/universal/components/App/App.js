@@ -1,7 +1,6 @@
 /* @flow */
 
 import React from 'react';
-import CSSModules from 'react-css-modules';
 import { Match, Miss } from 'react-router';
 import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
@@ -58,4 +57,4 @@ function App() {
   );
 }
 
-export default CSSModules(App, styles);
+export default App;
