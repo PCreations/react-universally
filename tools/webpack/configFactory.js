@@ -12,6 +12,8 @@ const envVars = require('../config/envVars');
 
 const appRootPath = appRoot.toString();
 
+const nodeCssModules = require('./node-css-modules')
+
 function webpackConfigFactory({ target, mode }, { json }) {
   if (!target || ['client', 'server', 'universalMiddleware'].findIndex(valid => target === valid) === -1) {
     throw new Error(
@@ -355,18 +357,23 @@ function webpackConfigFactory({ target, mode }, { json }) {
           { test: /\.css$/ },
           // When targetting the server we use the "/locals" version of the
           // css loader.
-          ifNodeTarget({
+          /*ifNodeTarget({
             loaders: [
               'css-loader/locals',
             ],
+          }),*/
+          ifNodeTarget({
+            loaders: [
+              'css-loader/locals?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+            ]
           }),
           // For a production client build we use the ExtractTextPlugin which
           // will extract our CSS into CSS files.  The plugin needs to be
           // registered within the plugins section too.
           ifProdClient({
             loader: ExtractTextPlugin.extract({
-              fallbackLoader: 'style-loader',
-              loader: 'css-loader',
+                notExtractLoader: 'style-loader',
+                loader: 'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]!resolve-url!postcss',
             }),
           }),
           // For a development client we will use a straight style & css loader
@@ -374,9 +381,9 @@ function webpackConfigFactory({ target, mode }, { json }) {
           // experience.
           ifDevClient({
             loaders: [
-              'style-loader',
-              { loader: 'css-loader', query: { sourceMap: true } },
-            ],
+              'style?sourceMap',
+              'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+            ]
           })
         ),
       ],
