@@ -17,7 +17,9 @@ function renderApp(TheApp) {
         <TheApp />
       </BrowserRouter>
     </ReactHotLoader>,
-    container
+    container, () => {
+      document.querySelector("[data-aphrodite]").remove()
+    }
   );
 }
 

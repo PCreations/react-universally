@@ -1,5 +1,6 @@
 /* @flow */
 
+import { StyleSheetServer } from 'aphrodite';
 import { renderToString } from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import Helmet from 'react-helmet';
@@ -38,9 +39,9 @@ const scripts = scriptTags(clientAssets.scripts);
  * @return The full HTML page in the form of a React element.
  */
 function render(reactAppElement : ?ReactElement, initialState : ?Object) {
-  const reactApp = reactAppElement
-    ? renderToString(reactAppElement)
-    : '';
+  const { html, css } = StyleSheetServer.renderStatic(() => (
+    reactAppElement ? renderToString(reactAppElement) : ''
+  ))
 
   // If we had a reactAppElement then we need to run Helmet.rewind to extract
   // all the helmet information out of the helmet provider.
@@ -71,11 +72,11 @@ function render(reactAppElement : ?ReactElement, initialState : ?Object) {
 
         ${styles}
         ${helmet ? helmet.style.toString() : ''}
-
+        <style data-aphrodite>${css.content}</style>
         <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
       </head>
       <body>
-        <div id='app'>${reactApp}</div>
+        <div id='app'>${html}</div>
 
         <script type='text/javascript'>${
           initialState
