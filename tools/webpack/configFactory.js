@@ -257,14 +257,14 @@ function webpackConfigFactory({ target, mode }, { json }) {
         new webpack.LoaderOptionsPlugin({
           // Indicates to our loaders that they should minify their output
           // if they have the capability to do so.
-          minimize: true,
+          minimize: false,
           // Indicates to our loaders that they should enter into debug mode
           // should they support it.
-          debug: false,
+          debug: true,
         })
       ),
 
-      ifProdClient(
+      /*ifProdClient(
         // JS Minification.
         new webpack.optimize.UglifyJsPlugin({
           // sourceMap: true,
@@ -280,7 +280,7 @@ function webpackConfigFactory({ target, mode }, { json }) {
             screw_ie8: true,
           },
         })
-      ),
+      ),*/
 
       ifProdClient(
         // This is actually only useful when our deps are installed via npm2.
