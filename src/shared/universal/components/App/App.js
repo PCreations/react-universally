@@ -4,15 +4,16 @@ import React from 'react';
 import { Match, Miss } from 'react-router';
 import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
-import 'normalize.css/normalize.css';
-import './globals.css';
+import CSSModules from 'react-css-modules';
+
 import Error404 from './Error404';
 import Header from './Header';
 import { WEBSITE_TITLE, WEBSITE_DESCRIPTION } from '../../constants';
+import styles from './app.css';
 
 function App() {
   return (
-    <div style={{ padding: '10px' }}>
+    <div styleName='container'>
       {/*
         All of the following will be injected into our page header.
         @see https://github.com/nfl/react-helmet
@@ -34,6 +35,11 @@ function App() {
           { rel: 'manifest', href: '/manifest.json' },
           { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#5bbad5' },
         ]}
+        link={[{
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/globals.css'
+        }]}
         script={[]}
       />
 
@@ -66,4 +72,4 @@ function App() {
   );
 }
 
-export default App;
+export default CSSModules(App, styles);
