@@ -266,7 +266,7 @@ function webpackConfigFactory({ target, mode }, { json }) {
         })
       ),
 
-      /*ifProdClient(
+      ifProdClient(
         // JS Minification.
         new webpack.optimize.UglifyJsPlugin({
           // sourceMap: true,
@@ -282,7 +282,7 @@ function webpackConfigFactory({ target, mode }, { json }) {
             screw_ie8: true,
           },
         })
-      ),*/
+      ),
 
       ifProdClient(
         // This is actually only useful when our deps are installed via npm2.
@@ -290,13 +290,7 @@ function webpackConfigFactory({ target, mode }, { json }) {
         // given the nested module structure. npm3 is flat, so this doesn't
         // occur.
         new webpack.optimize.DedupePlugin()
-      ),
-
-      ifProdClient(
-        // This is a production client so we will extract our CSS into
-        // CSS files.
-        new ExtractTextPlugin({ filename: '[name]-[chunkhash].css', allChunks: true })
-      ),
+      )
     ]),
     module: {
       rules: [
@@ -380,14 +374,11 @@ function webpackConfigFactory({ target, mode }, { json }) {
               'css-loader/locals?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
             ]
           }),
-          // For a production client build we use the ExtractTextPlugin which
-          // will extract our CSS into CSS files.  The plugin needs to be
-          // registered within the plugins section too.
           ifProdClient({
-            loader: ExtractTextPlugin.extract({
-                notExtractLoader: 'style-loader',
-                loader: 'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]!resolve-url!postcss',
-            }),
+            loaders: [
+              'style',
+              'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+            ]
           }),
           // For a development client we will use a straight style & css loader
           // along with source maps.  This combo gives us a better development
