@@ -364,10 +364,10 @@ function webpackConfigFactory({ target, mode }, { json }) {
           // will extract our CSS into CSS files.  The plugin needs to be
           // registered within the plugins section too.
           ifProdClient({
-            loader: ExtractTextPlugin.extract({
-              fallbackLoader: 'style-loader',
-              loader: 'css-loader',
-            }),
+            loaders: [
+              'style',
+              'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+            ]
           }),
           // For a development client we will use a straight style & css loader
           // along with source maps.  This combo gives us a better development
