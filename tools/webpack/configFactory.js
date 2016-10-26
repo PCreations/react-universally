@@ -367,14 +367,11 @@ function webpackConfigFactory({ target, mode }, { json }) {
               'css-loader/locals?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
             ]
           }),
-          // For a production client build we use the ExtractTextPlugin which
-          // will extract our CSS into CSS files.  The plugin needs to be
-          // registered within the plugins section too.
           ifProdClient({
-            loader: ExtractTextPlugin.extract({
-                notExtractLoader: 'style-loader',
-                loader: 'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]!resolve-url!postcss',
-            }),
+            loaders: [
+              'style',
+              'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+            ]
           }),
           // For a development client we will use a straight style & css loader
           // along with source maps.  This combo gives us a better development
