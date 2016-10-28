@@ -5,7 +5,10 @@ import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router';
 import ReactHotLoader from './components/ReactHotLoader';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import App from '../shared/universal/components/App';
+import theme from '../shared/universal/components/App/theme';
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
@@ -49,11 +52,13 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+injectTapEventPlugin();
+
 function renderApp(TheApp) {
   render(
     <ReactHotLoader>
       <BrowserRouter>
-        <TheApp />
+        <TheApp muiTheme={theme(navigator.userAgent)}/>
       </BrowserRouter>
     </ReactHotLoader>,
     container

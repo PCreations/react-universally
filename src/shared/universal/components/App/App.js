@@ -4,19 +4,19 @@ import React from 'react';
 import { Match, Miss } from 'react-router';
 import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AppBar from 'material-ui/AppBar';
+
 import 'normalize.css/normalize.css';
+
 import './globals.css';
 import Error404 from './Error404';
 import Header from './Header';
 import { WEBSITE_TITLE, WEBSITE_DESCRIPTION } from '../../constants';
 
-function App() {
+function App({ muiTheme }) {
   return (
-    <div style={{ padding: '10px' }}>
-      {/*
-        All of the following will be injected into our page header.
-        @see https://github.com/nfl/react-helmet
-      */}
+    <div>
       <Helmet
         htmlAttributes={{ lang: 'en' }}
         titleTemplate={`${WEBSITE_TITLE} - %s`}
@@ -34,34 +34,41 @@ function App() {
           { rel: 'manifest', href: '/manifest.json' },
           { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#5bbad5' },
         ]}
+        link={[
+          { href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500', rel: 'stylesheet' },
+          { href: 'https://fonts.googleapis.com/icon?family=Material+Icons', rel: 'stylesheet' },
+        ]}
         script={[]}
       />
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          <AppBar
+            title="Title"
+          />
+          <Header />
 
-      <Header />
+          <Match
+            exactly
+            pattern="/"
+            render={routerProps =>
+              <CodeSplit module={System.import('./Home')}>
+                { Home => Home && <Home {...routerProps} /> }
+              </CodeSplit>
+            }
+          />
 
-      <Match
-        exactly
-        pattern="/"
-        render={routerProps =>
-          <CodeSplit module={System.import('./Home')}>
-            { Home => {
-              console.log("Rendering HOME")
-              return Home && <Home {...routerProps} />
-            } }
-          </CodeSplit>
-        }
-      />
+          <Match
+            pattern="/about"
+            render={routerProps =>
+              <CodeSplit module={System.import('./About')}>
+                { About => About && <About {...routerProps} /> }
+              </CodeSplit>
+            }
+          />
 
-      <Match
-        pattern="/about"
-        render={routerProps =>
-          <CodeSplit module={System.import('./About')}>
-            { About => About && <About {...routerProps} /> }
-          </CodeSplit>
-        }
-      />
-
-      <Miss component={Error404} />
+          <Miss component={Error404} />
+        </div>
+      </MuiThemeProvider>
     </div>
   );
 }

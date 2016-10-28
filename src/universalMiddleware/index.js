@@ -5,6 +5,7 @@ import React from 'react';
 import { ServerRouter, createServerRenderContext } from 'react-router';
 import render from './render';
 import App from '../shared/universal/components/App';
+import theme from '../shared/universal/components/App/theme';
 
 /**
  * An express middleware that is capabable of doing React server side rendering.
@@ -31,7 +32,7 @@ function universalReactAppMiddleware(request: $Request, response: $Response) {
       location={request.url}
       context={context}
     >
-      <App />
+      <App muiTheme={theme(request.useragent.source)}/>
     </ServerRouter>
   );
 
