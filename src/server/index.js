@@ -7,6 +7,7 @@ import 'source-map-support/register';
 import path from 'path';
 import appRoot from 'app-root-path';
 import express from 'express';
+import useragent from 'express-useragent';
 import type { $Request, $Response, NextFunction } from 'express';
 import compression from 'compression';
 import hpp from 'hpp';
@@ -24,6 +25,8 @@ app.disable('x-powered-by');
 
 // Prevent HTTP Parameter pollution.
 app.use(hpp());
+
+app.use(useragent.express());
 
 // Content Security Policy
 app.use(helmet.contentSecurityPolicy({
