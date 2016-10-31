@@ -52,7 +52,6 @@ function App({ muiTheme }) {
           <AppBar
             title="Title"
           />
-          <Header />
 
           <Match
             exactly

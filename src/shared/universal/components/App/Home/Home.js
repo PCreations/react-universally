@@ -4,26 +4,39 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import { AutoSizer, List } from 'react-virtualized';
+import CSSModules from 'react-css-modules';
+
+import styles from './home.css';
+import PostCard from '../PostCard';
 
 const postsTitleQuery = gql`
   {
     posts {
       _id,
-      title
+      title,
+      author {
+        name
+      },
+      category
     }
   }
 `
 
 function Home({ data: { loading, posts } }) {
   return (
-    <article>
+    <article styleName='container'>
       <Helmet title="Home" />
       {loading ? <p>loading...</p> : (
-        <ul>
-          {posts.map(p => (
-            <li key={p._id}>{p.title}</li>
-          ))}
-        </ul>
+        posts.map(post => (
+          <PostCard
+            key={post._id}
+            title={post.title}
+            author={post.author.name}
+            summary={post.summary}
+            category={post.category.name}
+          />
+        ))
       )}
     </article>
   );
@@ -39,4 +52,4 @@ Home.propTypes = {
   })
 }
 
-export default graphql(postsTitleQuery)(Home);
+export default graphql(postsTitleQuery)(CSSModules(Home, styles));
