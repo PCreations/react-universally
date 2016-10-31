@@ -3,6 +3,9 @@
 import type { $Request, $Response, Middleware } from 'express';
 import React from 'react';
 import { ServerRouter, createServerRenderContext } from 'react-router';
+import { createNetworkInterface, ApolloClient } from 'apollo-client';
+import { ApolloProvider } from 'react-apollo';
+
 import render from './render';
 import App from '../shared/universal/components/App';
 import theme from '../shared/universal/components/App/theme';
@@ -26,43 +29,50 @@ function universalReactAppMiddleware(request: $Request, response: $Response) {
   // query for the results of the render.
   const context = createServerRenderContext();
 
+  const client = new ApolloClient({
+    ssrMode: true,
+    networkInterface: createNetworkInterface({ uri: 'http://localhost:1337/graphql' })
+  });
+
   // Create the application react element.
   const app = (
     <ServerRouter
       location={request.url}
       context={context}
     >
-      <App muiTheme={theme(request.useragent.source)}/>
+      <ApolloProvider client={client}>
+        <App muiTheme={theme(request.useragent.source)}/>
+      </ApolloProvider>
     </ServerRouter>
   );
 
   // Render the app to a string.
-  const html = render(
+  render(
     // Provide the full app react element.
     app
-  );
+  ).then(html => {
+    // Get the render result from the server render context.
+    const renderResult = context.getResult();
 
-  // Get the render result from the server render context.
-  const renderResult = context.getResult();
+    // Check if the render result contains a redirect, if so we need to set
+    // the specific status and redirect header and end the response.
+    if (renderResult.redirect) {
+      response.status(301).setHeader('Location', renderResult.redirect.pathname);
+      response.end();
+      return;
+    }
 
-  // Check if the render result contains a redirect, if so we need to set
-  // the specific status and redirect header and end the response.
-  if (renderResult.redirect) {
-    response.status(301).setHeader('Location', renderResult.redirect.pathname);
-    response.end();
-    return;
-  }
-
-  response
-    .status(
-      renderResult.missed
-        // If the renderResult contains a "missed" match then we set a 404 code.
-        // Our App component will handle the rendering of an Error404 view.
-        ? 404
-        // Otherwise everything is all good and we send a 200 OK status.
-        : 200
-    )
-    .send(html);
+    response
+      .status(
+        renderResult.missed
+          // If the renderResult contains a "missed" match then we set a 404 code.
+          // Our App component will handle the rendering of an Error404 view.
+          ? 404
+          // Otherwise everything is all good and we send a 200 OK status.
+          : 200
+      )
+      .send(html);
+  });
 }
 
 export default (universalReactAppMiddleware : Middleware);

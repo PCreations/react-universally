@@ -1,6 +1,7 @@
 /* @flow */
-
+import 'isomorphic-fetch';
 import { renderToString } from 'react-dom/server';
+import { renderToStringWithData } from 'react-apollo/server'
 import serialize from 'serialize-javascript';
 import Helmet from 'react-helmet';
 import clientAssets from './clientAssets';
@@ -42,51 +43,58 @@ function render(reactAppElement : ?ReactElement, initialState : ?Object) {
     ? renderToString(reactAppElement)
     : '';
 
-  // If we had a reactAppElement then we need to run Helmet.rewind to extract
-  // all the helmet information out of the helmet provider.
-  // Note: you need to have called the renderToString on the react element before
-  // running this!
-  // @see https://github.com/nfl/react-helmet
-  const helmet = reactAppElement
-    // We run 'react-helmet' after our renderToString call so that we can fish
-    // out all the attributes which need to be attached to our page.
-    // React Helmet allows us to control our page header contents via our
-    // components.
+    // If we had a reactAppElement then we need to run Helmet.rewind to extract
+    // all the helmet information out of the helmet provider.
+    // Note: you need to have called the renderToString on the react element before
+    // running this!
     // @see https://github.com/nfl/react-helmet
-    ? Helmet.rewind()
-    // There was no react element, so we just us an empty helmet.
-    : null;
+    const helmet = reactAppElement
+      // We run 'react-helmet' after our renderToString call so that we can fish
+      // out all the attributes which need to be attached to our page.
+      // React Helmet allows us to control our page header contents via our
+      // components.
+      // @see https://github.com/nfl/react-helmet
+      ? Helmet.rewind()
+      // There was no react element, so we just us an empty helmet.
+      : null;
 
-  return `<!DOCTYPE html>
-    <html ${helmet ? helmet.htmlAttributes.toString() : ''}>
-      <head>
-        <meta charSet='utf-8' />
-        <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
-        <meta httpEquiv='Content-Language' content='en' />
-        <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  return renderToStringWithData(reactAppElement).then(({ markup, initialState }) => {
+    const apolloState = {
+      apollo: {
+        data: initialState.apollo.data
+      }
+    }
+    return `<!DOCTYPE html>
+      <html ${helmet ? helmet.htmlAttributes.toString() : ''}>
+        <head>
+          <meta charSet='utf-8' />
+          <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
+          <meta httpEquiv='Content-Language' content='en' />
+          <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
 
-        ${helmet ? helmet.title.toString() : ''}
-        ${helmet ? helmet.meta.toString() : ''}
-        ${helmet ? helmet.link.toString() : ''}
+          ${helmet ? helmet.title.toString() : ''}
+          ${helmet ? helmet.meta.toString() : ''}
+          ${helmet ? helmet.link.toString() : ''}
 
-        ${styles}
-        ${helmet ? helmet.style.toString() : ''}
+          ${styles}
+          ${helmet ? helmet.style.toString() : ''}
 
-        <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
-      </head>
-      <body>
-        <div id='app'>${reactApp}</div>
+          <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+        </head>
+        <body>
+          <div id='app'>${markup}</div>
 
-        <script type='text/javascript'>${
-          initialState
-            ? `window.APP_STATE=${serialize(initialState)};`
-            : ''
-        }</script>
+          <script type='text/javascript'>${
+            initialState
+              ? `window.__APOLLO_STATE__=${serialize(apolloState)};`
+              : ''
+          }</script>
 
-        ${scripts}
-        ${helmet ? helmet.script.toString() : ''}
-      </body>
-    </html>`;
+          ${scripts}
+          ${helmet ? helmet.script.toString() : ''}
+        </body>
+      </html>`;
+  }).catch(err => console.error(err))
 }
 
 export default render;

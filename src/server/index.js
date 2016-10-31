@@ -8,6 +8,7 @@ import path from 'path';
 import appRoot from 'app-root-path';
 import express from 'express';
 import useragent from 'express-useragent';
+import graphqlHTTP from 'express-graphql';
 import type { $Request, $Response, NextFunction } from 'express';
 import compression from 'compression';
 import hpp from 'hpp';
@@ -15,6 +16,7 @@ import helmet from 'helmet';
 import universalMiddleware from './middleware/universalMiddleware';
 import { notEmpty } from '../shared/universal/utils/guards';
 
+import schema from './schema'
 const appRootPath = appRoot.toString();
 
 // Create our express based server.
@@ -27,6 +29,11 @@ app.disable('x-powered-by');
 app.use(hpp());
 
 app.use(useragent.express());
+
+app.use('/graphql', graphqlHTTP({
+  graphiql: true,
+  schema
+}));
 
 // Content Security Policy
 app.use(helmet.contentSecurityPolicy({

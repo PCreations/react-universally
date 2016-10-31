@@ -6,12 +6,18 @@ import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router';
 import ReactHotLoader from './components/ReactHotLoader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import { ApolloClient, createNetworkInterface } from 'apollo-client';
+import { ApolloProvider } from 'react-apollo';
 
 import App from '../shared/universal/components/App';
 import theme from '../shared/universal/components/App/theme';
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
+const client = new ApolloClient({
+  networkInterface: createNetworkInterface('http://localhost:1337/graphql'),
+  initialState: window.__APOLLO_STATE__
+});
 
 if ('serviceWorker' in navigator) {
   // Your service-worker.js *must* be located at the top-level directory relative to your site.
@@ -58,7 +64,9 @@ function renderApp(TheApp) {
   render(
     <ReactHotLoader>
       <BrowserRouter>
-        <TheApp muiTheme={theme(navigator.userAgent)}/>
+        <ApolloProvider client={client}>
+          <TheApp muiTheme={theme(navigator.userAgent)}/>
+        </ApolloProvider>
       </BrowserRouter>
     </ReactHotLoader>,
     container
