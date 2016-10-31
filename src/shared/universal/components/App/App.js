@@ -6,17 +6,19 @@ import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
-
-import 'normalize.css/normalize.css';
-
-import './globals.css';
+import CSSModules from 'react-css-modules';
 import Error404 from './Error404';
 import Header from './Header';
 import { WEBSITE_TITLE, WEBSITE_DESCRIPTION } from '../../constants';
+import styles from './app.css';
 
 function App({ muiTheme }) {
   return (
-    <div>
+    <div styleName='container'>
+      {/*
+        All of the following will be injected into our page header.
+        @see https://github.com/nfl/react-helmet
+      */}
       <Helmet
         htmlAttributes={{ lang: 'en' }}
         titleTemplate={`${WEBSITE_TITLE} - %s`}
@@ -38,6 +40,11 @@ function App({ muiTheme }) {
           { href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500', rel: 'stylesheet' },
           { href: 'https://fonts.googleapis.com/icon?family=Material+Icons', rel: 'stylesheet' },
         ]}
+        link={[{
+          rel: 'stylesheet',
+          type: 'text/css',
+          href: '/globals.css'
+        }]}
         script={[]}
       />
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -73,4 +80,4 @@ function App({ muiTheme }) {
   );
 }
 
-export default App;
+export default CSSModules(App, styles);
