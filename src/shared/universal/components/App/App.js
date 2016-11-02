@@ -35,7 +35,7 @@ function App() {
           { rel: 'icon', type: 'image/png', href: '/favicon-16x16.png', sizes: '16x16' },
           { rel: 'manifest', href: '/manifest.json' },
           { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#5bbad5' },
-          { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
+          { rel: 'stylesheet', href: '/material-icons.css' },
           { rel: 'stylesheet', href: '/material.css' },
           {
             rel: 'stylesheet',
@@ -44,6 +44,7 @@ function App() {
           }
         ]}
         script={[
+          { src: '/polyfill.min.js', type: 'text/javascript' },
           { src: '/material.js', type: 'text/javascript' }
         ]}
       />

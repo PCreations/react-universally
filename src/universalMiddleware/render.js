@@ -77,7 +77,6 @@ function render(reactAppElement : ?ReactElement, initialState : ?Object) {
         ${styles}
         ${helmet ? helmet.style.toString() : ''}
 
-        <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
         ${helmet ? helmet.script.toString() : ''}
       </head>
       <body>
