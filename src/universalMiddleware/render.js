@@ -49,6 +49,7 @@ function render(reactAppElement : ?ReactElement, initialState : ?Object) {
     // Note: you need to have called the renderToString on the react element before
     // running this!
     // @see https://github.com/nfl/react-helmet
+
     const helmet = reactAppElement
       // We run 'react-helmet' after our renderToString call so that we can fish
       // out all the attributes which need to be attached to our page.
@@ -80,7 +81,7 @@ function render(reactAppElement : ?ReactElement, initialState : ?Object) {
           ${styles}
           ${helmet ? helmet.style.toString() : ''}
 
-          <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+          ${helmet ? helmet.script.toString() : ''}
         </head>
         <body>
           <div id='app'>${markup}</div>
@@ -92,7 +93,6 @@ function render(reactAppElement : ?ReactElement, initialState : ?Object) {
           }</script>
 
           ${scripts}
-          ${helmet ? helmet.script.toString() : ''}
         </body>
       </html>`;
   }).catch(err => console.error(err))

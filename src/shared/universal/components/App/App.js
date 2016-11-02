@@ -1,18 +1,16 @@
 /* @flow */
 
 import React from 'react';
-import { Match, Miss } from 'react-router';
+import { Match, Miss, Link } from 'react-router';
 import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
+import { Layout, Header, Textfield, Drawer, Navigation, Content } from 'react-mdl';
 import CSSModules from 'react-css-modules';
 import Error404 from './Error404';
-import Header from './Header';
 import { WEBSITE_TITLE, WEBSITE_DESCRIPTION } from '../../constants';
 import styles from './app.css';
 
-function App({ muiTheme }) {
+function App() {
   return (
     <div styleName='container'>
       {/*
@@ -35,24 +33,37 @@ function App({ muiTheme }) {
           { rel: 'icon', type: 'image/png', href: '/favicon-16x16.png', sizes: '16x16' },
           { rel: 'manifest', href: '/manifest.json' },
           { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#5bbad5' },
+          { rel: 'stylesheet', href: '/material-icons.css' },
+          { rel: 'stylesheet', href: '/roboto-font.css' },
+          { rel: 'stylesheet', href: '/material.css' },
+          {
+            rel: 'stylesheet',
+            type: 'text/css',
+            href: '/globals.css'
+          }
         ]}
-        link={[
-          { href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500', rel: 'stylesheet' },
-          { href: 'https://fonts.googleapis.com/icon?family=Material+Icons', rel: 'stylesheet' },
+        script={[
+          { src: '/polyfill.min.js', type: 'text/javascript' },
+          { src: '/material.js', type: 'text/javascript' }
         ]}
-        link={[{
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '/globals.css'
-        }]}
-        script={[]}
       />
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div>
-          <AppBar
-            title="Title"
+      <Layout fixedHeader fixedDrawer>
+        <Header title="React Universally">
+          <Textfield
+              value=""
+              onChange={() => {}}
+              label="Search"
+              expandable
+              expandableIcon="search"
           />
-
+        </Header>
+        <Drawer title="React Universally">
+          <Navigation>
+            <Link to="/">Home</Link>
+            <Link to="/about">About</Link>
+          </Navigation>
+        </Drawer>
+        <Content>
           <Match
             exactly
             pattern="/"
@@ -73,8 +84,8 @@ function App({ muiTheme }) {
           />
 
           <Miss component={Error404} />
-        </div>
-      </MuiThemeProvider>
+        </Content>
+      </Layout>
     </div>
   );
 }

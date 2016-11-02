@@ -17,6 +17,10 @@ import universalMiddleware from './middleware/universalMiddleware';
 import { notEmpty } from '../shared/universal/utils/guards';
 
 import schema from './schema'
+
+global.window = {}
+global.window.addEventListener = function() {}
+
 const appRootPath = appRoot.toString();
 
 // Create our express based server.

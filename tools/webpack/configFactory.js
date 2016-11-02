@@ -172,7 +172,20 @@ function webpackConfigFactory({ target, mode }, { json }) {
         dynamicUrlToDependencies: {
           '/': [
             ...glob.sync(path.resolve(appRootPath, './build/client/*.js'))
-          ]
+          ],
+          '/material-icons.css': [path.resolve(appRootPath, './public/material-icons.css')],
+          '/polyfill.min.js': [path.resolve(appRootPath, './public/polyfill.min.js')],
+          '/material.css': [path.resolve(appRootPath, './public/material.js')],
+          '/globals.css': [path.resolve(appRootPath, './public/globals.css')],
+          '/material.js': [path.resolve(appRootPath, './public/material.js')],
+          '/android-chrome-192x192.png': [path.resolve(appRootPath, './public/android-chrome-192x192.png')],
+          '/apple-touch-icon.png': [path.resolve(appRootPath, './public/apple-touch-icon.png')],
+          '/browserconfig.xml': [path.resolve(appRootPath, './public/browserconfig.xml')],
+          '/favicon-16x16.png': [path.resolve(appRootPath, './public/favicon-16x16.png')],
+          '/favicon-32x32.png': [path.resolve(appRootPath, './public/favicon-32x32.png')],
+          '/favicon.ico': [path.resolve(appRootPath, './public/favicon.ico')],
+          '/mstile-150x150.png': [path.resolve(appRootPath, './public/mstile-150x150.png')],
+          '/safari-pinned-tab.svg': [path.resolve(appRootPath, './public/safari-pinned-tab.svg')],
         },
       })),
       // We use this so that our generated [chunkhash]'s are only different if
