@@ -188,6 +188,14 @@ function webpackConfigFactory({ target, mode }, { json }) {
           '/mstile-150x150.png': [path.resolve(appRootPath, './public/mstile-150x150.png')],
           '/safari-pinned-tab.svg': [path.resolve(appRootPath, './public/safari-pinned-tab.svg')],
         },
+        runtimeCaching: [{
+          urlPattern: /https:\/\/avatars.githubusercontent.com\//,
+          // Effectively "stale while revalidate".
+          handler: 'fastest'
+        }, {
+          // Use a network first strategy for everything else.
+          default: 'networkFirst'
+        }],
       })),
       // We use this so that our generated [chunkhash]'s are only different if
       // the content for our respective chunks have changed.  This optimises
