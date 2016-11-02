@@ -173,6 +173,7 @@ function webpackConfigFactory({ target, mode }, { json }) {
           '/': [
             ...glob.sync(path.resolve(appRootPath, './build/client/*.js'))
           ],
+          '/avatar_placeholder.png': [path.resolve(appRootPath, './public/avatar_placeholder.png')],
           '/material-icons.css': [path.resolve(appRootPath, './public/material-icons.css')],
           '/polyfill.min.js': [path.resolve(appRootPath, './public/polyfill.min.js')],
           '/material.css': [path.resolve(appRootPath, './public/material.js')],

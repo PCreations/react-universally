@@ -4,7 +4,7 @@ import React from 'react';
 import { Match, Miss, Link } from 'react-router';
 import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
-import { Layout, Header, Textfield, Drawer, Navigation, Content } from 'react-mdl';
+import { Layout, Header, HeaderRow, Textfield, Drawer, Navigation, Content } from 'react-mdl';
 import CSSModules from 'react-css-modules';
 import Error404 from './Error404';
 import { WEBSITE_TITLE, WEBSITE_DESCRIPTION } from '../../constants';
@@ -48,14 +48,22 @@ function App() {
         ]}
       />
       <Layout fixedHeader fixedDrawer>
-        <Header title="React Universally">
-          <Textfield
-              value=""
-              onChange={() => {}}
-              label="Search"
-              expandable
-              expandableIcon="search"
-          />
+        <Header waterfall>
+          <HeaderRow title="React Universally">
+            <Textfield
+                value=""
+                onChange={() => {}}
+                label="Search"
+                expandable
+                expandableIcon="search"
+            />
+          </HeaderRow>
+          <HeaderRow>
+            <Navigation>
+              <Link to="/">Home</Link>
+              <Link to="/about">About</Link>
+            </Navigation>
+          </HeaderRow>
         </Header>
         <Drawer title="React Universally">
           <Navigation>
