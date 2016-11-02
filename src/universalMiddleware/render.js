@@ -1,5 +1,9 @@
 /* @flow */
 
+//require('css-modules-require-hook/preset');
+
+console.log(process.env.DEBUG)
+
 import { renderToString } from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import Helmet from 'react-helmet';
@@ -38,6 +42,7 @@ const scripts = scriptTags(clientAssets.scripts);
  * @return The full HTML page in the form of a React element.
  */
 function render(reactAppElement : ?ReactElement, initialState : ?Object) {
+
   const reactApp = reactAppElement
     ? renderToString(reactAppElement)
     : '';
@@ -73,6 +78,7 @@ function render(reactAppElement : ?ReactElement, initialState : ?Object) {
         ${helmet ? helmet.style.toString() : ''}
 
         <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+        ${helmet ? helmet.script.toString() : ''}
       </head>
       <body>
         <div id='app'>${reactApp}</div>
@@ -84,7 +90,6 @@ function render(reactAppElement : ?ReactElement, initialState : ?Object) {
         }</script>
 
         ${scripts}
-        ${helmet ? helmet.script.toString() : ''}
       </body>
     </html>`;
 }

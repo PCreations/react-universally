@@ -14,6 +14,9 @@ import helmet from 'helmet';
 import universalMiddleware from './middleware/universalMiddleware';
 import { notEmpty } from '../shared/universal/utils/guards';
 
+global.window = {}
+global.window.addEventListener = function() {}
+
 const appRootPath = appRoot.toString();
 
 // Create our express based server.

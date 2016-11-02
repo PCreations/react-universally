@@ -5,17 +5,16 @@ import { Match, Miss } from 'react-router';
 import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
 import { Layout, Header, Textfield, Drawer, Navigation, Content } from 'react-mdl';
-import 'react-mdl/extra/material.css';
-import 'react-mdl/extra/material.js';
-import 'normalize.css/normalize.css';
 
-import './globals.css';
+import 'normalize.css/normalize.css';
+import CSSModules from 'react-css-modules';
 import Error404 from './Error404';
 import { WEBSITE_TITLE, WEBSITE_DESCRIPTION } from '../../constants';
+import styles from './app.css';
 
 function App() {
   return (
-    <div style={{height: '100vh', position: 'relative'}}>
+    <div styleName='container'>
       {/*
         All of the following will be injected into our page header.
         @see https://github.com/nfl/react-helmet
@@ -28,9 +27,17 @@ function App() {
           { name: 'description', content: WEBSITE_DESCRIPTION },
         ]}
         link={[
-          { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }
+          { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
+          { rel: 'stylesheet', href: '/material.css' },
+          {
+            rel: 'stylesheet',
+            type: 'text/css',
+            href: '/globals.css'
+          }
         ]}
-        script={[]}
+        script={[
+          { src: '/material.js', type: 'text/javascript' }
+        ]}
       />
       <Layout fixedHeader fixedDrawer>
         <Header title="React Universally">
@@ -75,4 +82,4 @@ function App() {
   );
 }
 
-export default App;
+export default CSSModules(App, styles);
