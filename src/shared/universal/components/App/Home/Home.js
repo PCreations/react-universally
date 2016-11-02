@@ -4,8 +4,8 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import { AutoSizer, List } from 'react-virtualized';
 import CSSModules from 'react-css-modules';
+import { Grid, Cell } from 'react-mdl';
 
 import styles from './home.css';
 import PostCard from '../PostCard';
@@ -28,15 +28,18 @@ function Home({ data: { loading, posts } }) {
     <article styleName='container'>
       <Helmet title="Home" />
       {loading ? <p>loading...</p> : (
-        posts.map(post => (
-          <PostCard
-            key={post._id}
-            title={post.title}
-            author={post.author.name}
-            summary={post.summary}
-            category={post.category.name}
-          />
-        ))
+        <Grid>
+          {posts.map(post => (
+            <Cell col={4} key={post._id}>
+              <PostCard
+                title={post.title}
+                author={post.author.name}
+                summary={post.summary}
+                category={post.category.name}
+              />
+            </Cell>
+          ))}
+        </Grid>
       )}
     </article>
   );

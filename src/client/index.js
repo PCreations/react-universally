@@ -10,7 +10,6 @@ import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 import App from '../shared/universal/components/App';
-import theme from '../shared/universal/components/App/theme';
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
@@ -65,7 +64,7 @@ function renderApp(TheApp) {
     <ReactHotLoader>
       <BrowserRouter>
         <ApolloProvider client={client}>
-          <TheApp muiTheme={theme(navigator.userAgent)}/>
+          <TheApp/>
         </ApolloProvider>
       </BrowserRouter>
     </ReactHotLoader>,

@@ -8,13 +8,12 @@ import { ApolloProvider } from 'react-apollo';
 
 import render from './render';
 import App from '../shared/universal/components/App';
-import theme from '../shared/universal/components/App/theme';
 
 /**
  * An express middleware that is capabable of doing React server side rendering.
  */
 function universalReactAppMiddleware(request: $Request, response: $Response) {
-  
+
   if (process.env.DISABLE_SSR === 'true') {
     if (process.env.NODE_ENV === 'development') {
       console.log('==> Handling react route without SSR');  // eslint-disable-line no-console
@@ -42,7 +41,7 @@ function universalReactAppMiddleware(request: $Request, response: $Response) {
       context={context}
     >
       <ApolloProvider client={client}>
-        <App muiTheme={theme(request.useragent.source)}/>
+        <App/>
       </ApolloProvider>
     </ServerRouter>
   );
