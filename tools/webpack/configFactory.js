@@ -1,8 +1,10 @@
 /* eslint-disable no-console,import/no-extraneous-dependencies */
 
+const glob = require('glob');
 const path = require('path');
 const webpack = require('webpack');
 const AssetsPlugin = require('assets-webpack-plugin');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const appRoot = require('app-root-path');
@@ -162,6 +164,17 @@ function webpackConfigFactory({ target, mode }, { json }) {
       ],
     },
     plugins: removeEmpty([
+      ifClient(new SWPrecacheWebpackPlugin({
+        cacheId: 'react-universally-pwa',
+        filename: 'react-universally-pwa.sw.js',
+        filepath: path.resolve(appRootPath, `./public/react-universally-pwa.sw.js`),
+        maximumFileSizeToCacheInBytes: 4194304,
+        dynamicUrlToDependencies: {
+          '/': [
+            ...glob.sync(path.resolve(appRootPath, './build/client/*.js'))
+          ]
+        },
+      })),
       // We use this so that our generated [chunkhash]'s are only different if
       // the content for our respective chunks have changed.  This optimises
       // our long term browser caching strategy for our client bundle, avoiding
@@ -246,14 +259,14 @@ function webpackConfigFactory({ target, mode }, { json }) {
         new webpack.LoaderOptionsPlugin({
           // Indicates to our loaders that they should minify their output
           // if they have the capability to do so.
-          minimize: true,
+          minimize: false,
           // Indicates to our loaders that they should enter into debug mode
           // should they support it.
-          debug: false,
+          debug: true,
         })
       ),
 
-      ifProdClient(
+      /*ifProdClient(
         // JS Minification.
         new webpack.optimize.UglifyJsPlugin({
           // sourceMap: true,
@@ -269,7 +282,7 @@ function webpackConfigFactory({ target, mode }, { json }) {
             screw_ie8: true,
           },
         })
-      ),
+      ),*/
 
       ifProdClient(
         // This is actually only useful when our deps are installed via npm2.
