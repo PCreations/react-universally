@@ -1,7 +1,7 @@
 /* @flow */
 
 import React from 'react';
-import { Match, Miss } from 'react-router';
+import { Match, Miss, Link } from 'react-router';
 import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
 import { Layout, Header, Textfield, Drawer, Navigation, Content } from 'react-mdl';
@@ -60,8 +60,8 @@ function App() {
         </Header>
         <Drawer title="React Universally">
           <Navigation>
-            <a href="/">Home</a>
-            <a href="/about">About</a>
+            <Link to="/">Home</Link>
+            <Link to="/about">About</Link>
           </Navigation>
         </Drawer>
         <Content>
