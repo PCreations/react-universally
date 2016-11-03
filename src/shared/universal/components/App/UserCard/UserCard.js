@@ -6,13 +6,13 @@ import { graphql } from 'react-apollo';
 
 import styles from './usercard.css';
 
-const UserCard = ({ avatarUrl = '/avatar_placeholder.png', userName }) => (
+const UserCard = ({ avatarUrl = '/avatar_placeholder.png', userName, totalStargazers }) => (
   <Card shadow={0} styleName='card' style={{background: `url(${avatarUrl}) center / cover`}}>
     <CardTitle expand />
     <CardActions styleName='actions'>
-        <span styleName='username'>
-            {userName}
-        </span>
+      <span styleName='username'>
+        {`${userName} (${totalStargazers} stargazers)`}
+      </span>
     </CardActions>
   </Card>
 )

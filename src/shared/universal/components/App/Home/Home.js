@@ -15,7 +15,8 @@ const usersQuery = gql`
     users {
       id,
       avatar_url,
-      login
+      login,
+      total_stargazers
     }
   }
 `
@@ -31,6 +32,7 @@ function Home({ data: { loading, users } }) {
               <UserCard
                 avatarUrl={user.avatar_url}
                 userName={user.login}
+                totalStargazers={user.total_stargazers}
               />
             </Cell>
           ))}
@@ -46,7 +48,8 @@ Home.propTypes = {
     users: React.PropTypes.arrayOf(React.PropTypes.shape({
       id: React.PropTypes.number.isRequired,
       avatar_url: React.PropTypes.string.isRequired,
-      login: React.PropTypes.string.isRequired
+      login: React.PropTypes.string.isRequired,
+      total_stargazers: React.PropTypes.number.isRequired
     }))
   })
 }
