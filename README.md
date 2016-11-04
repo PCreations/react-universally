@@ -33,7 +33,7 @@ This starter kit contains all the build tooling and configuration you need to ki
   - 👀 `react` as the view.
   - 🔀 `react-router` v4 as the router, along with `code-split-component` (provides you declarative code splitting for your routes).
   - ⛑ `react-helmet` allowing control of the page title/meta/styles/scripts from within your components. Direct control for your SEO needs.
-  - 🖌 CSS Modules working with server side rendering.
+  - 🖌 CSS Modules working for both client and server side rendering.
   - 🏜 Image and Font support.
   - 🚀 Full ES2017+ support, using `babel` to transpile where needed.
   - 📦 Bundling of both client and server using `webpack` v2.

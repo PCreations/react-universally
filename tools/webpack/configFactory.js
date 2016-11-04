@@ -368,12 +368,11 @@ function webpackConfigFactory({ target, mode }, { json }) {
               loader: 'css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
             }),
           }),
-          // For a development client we will use a straight style & css loader
-          // along with source maps.  This combo gives us a better development
-          // experience.
+          // For a development client we will use the ExtractTextPlugin to avoid FOUC effect with
+          // server side rendering
           ifDevClient({
             loader: ExtractTextPlugin.extract({
-              fallbackLoader: 'style-loader',
+              fallbackLoader: 'style-loader?sourceMap',
               loader: 'css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
             }),
           })
