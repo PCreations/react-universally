@@ -45,7 +45,6 @@ function App() {
         render={routerProps =>
           <CodeSplit module={System.import('./Home')}>
             { Home => {
-              console.log("Rendering HOME")
               return Home && <Home {...routerProps} />
             } }
           </CodeSplit>

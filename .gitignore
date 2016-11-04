@@ -4,6 +4,9 @@
 # Build output folders
 build/
 
+# service worker file
+public/react-universally-pwa.sw.js
+
 # Logs
 logs
 *.log
