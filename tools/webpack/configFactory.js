@@ -167,9 +167,15 @@ function webpackConfigFactory({ target, mode }, { json }) {
         filename: 'react-universally-pwa.sw.js',
         filepath: path.resolve(appRootPath, `./public/react-universally-pwa.sw.js`),
         maximumFileSizeToCacheInBytes: 4194304,
+        navigateFallback: '/shell',
+        staticFileGlobs: [
+          ...glob.sync(path.resolve(appRootPath, './build/client/*.js')),
+          ...glob.sync(path.resolve(appRootPath, './public/images/**/*'))
+        ]
         dynamicUrlToDependencies: {
-          '/': [
-            ...glob.sync(path.resolve(appRootPath, './build/client/*.js'))
+          '/shell': [
+            ...glob.sync(path.resolve(appRootPath, './build/client/*.js')),
+            ...glob.sync(path.resolve(appRootPath, './public/images/**/*'))
           ]
         },
       })),
