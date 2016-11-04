@@ -279,9 +279,9 @@ function webpackConfigFactory({ target, mode }, { json }) {
         new webpack.optimize.DedupePlugin()
       ),
 
-      ifProdClient(
-        // This is a production client so we will extract our CSS into
-        // CSS files.
+      ifClient(
+        // We use css modules so we need to extract our CSS into
+        // CSS files to avoid FOUC effect.
         new ExtractTextPlugin({ filename: '[name]-[chunkhash].css', allChunks: true })
       ),
     ]),
@@ -357,30 +357,25 @@ function webpackConfigFactory({ target, mode }, { json }) {
           { test: /\.css$/ },
           // When targetting the server we use the "/locals" version of the
           // css loader.
-          /*ifNodeTarget({
-            loaders: [
-              'css-loader/locals',
-            ],
-          }),*/
           ifNodeTarget({
             loaders: [
               'css-loader/locals?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
             ]
           }),
           ifProdClient({
-            loaders: [
-              'style',
-              'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
-            ]
+            loader: ExtractTextPlugin.extract({
+              fallbackLoader: 'style-loader',
+              loader: 'css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+            }),
           }),
           // For a development client we will use a straight style & css loader
           // along with source maps.  This combo gives us a better development
           // experience.
           ifDevClient({
-            loaders: [
-              'style?sourceMap',
-              'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
-            ]
+            loader: ExtractTextPlugin.extract({
+              fallbackLoader: 'style-loader',
+              loader: 'css-loader?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+            }),
           })
         ),
       ],
