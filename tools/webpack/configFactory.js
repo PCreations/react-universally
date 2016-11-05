@@ -169,12 +169,12 @@ function webpackConfigFactory({ target, mode }, { json }) {
         maximumFileSizeToCacheInBytes: 4194304,
         navigateFallback: '/shell',
         staticFileGlobs: [
-          ...glob.sync(path.resolve(appRootPath, './build/client/*.js')),
-          ...glob.sync(path.resolve(appRootPath, './public/images/**/*'))
-        ]
+          '/images/**/*',
+          '/client/**/*'
+        ],
         dynamicUrlToDependencies: {
           '/shell': [
-            ...glob.sync(path.resolve(appRootPath, './build/client/*.js')),
+            ...glob.sync(path.resolve(appRootPath, './build/client/**/*')),
             ...glob.sync(path.resolve(appRootPath, './public/images/**/*'))
           ]
         },
