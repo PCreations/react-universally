@@ -164,7 +164,7 @@ function webpackConfigFactory({ target, mode }, { json }) {
       ],
     },
     plugins: removeEmpty([
-      ifClient(new SWPrecacheWebpackPlugin({
+      /*ifClient(new SWPrecacheWebpackPlugin({
         cacheId: 'react-universally-pwa',
         filename: 'react-universally-pwa.sw.js',
         filepath: path.resolve(appRootPath, `./public/react-universally-pwa.sw.js`),
@@ -196,7 +196,7 @@ function webpackConfigFactory({ target, mode }, { json }) {
           // Use a network first strategy for everything else.
           default: 'networkFirst'
         }],
-      })),
+      })),*/
       // We use this so that our generated [chunkhash]'s are only different if
       // the content for our respective chunks have changed.  This optimises
       // our long term browser caching strategy for our client bundle, avoiding

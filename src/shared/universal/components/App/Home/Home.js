@@ -5,8 +5,8 @@ import Helmet from 'react-helmet';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import CSSModules from 'react-css-modules';
-import { Grid, Cell } from 'react-mdl';
 
+import VirtualizedMDLGrid from '../VirtualizedMDLGrid';
 import styles from './home.css';
 import UserCard from '../UserCard';
 
@@ -15,8 +15,7 @@ const usersQuery = gql`
     users {
       id,
       avatar_url,
-      login,
-      total_stargazers
+      login
     }
   }
 `
@@ -26,17 +25,20 @@ function Home({ data: { loading, users } }) {
     <article styleName='container'>
       <Helmet title="Home" />
       {loading ? <p>loading...</p> : (
-        <Grid>
-          {users.map(user => (
-            <Cell col={3} tablet={4} phone={12} key={user.id}>
-              <UserCard
-                avatarUrl={user.avatar_url}
-                userName={user.login}
-                totalStargazers={user.total_stargazers}
-              />
-            </Cell>
-          ))}
-        </Grid>
+        <VirtualizedMDLGrid
+          col={3}
+          tablet={2}
+          phone={1}
+          items={users}
+          rowHeight={217}
+          getCellKey={user => user.id}
+          renderItem={user => (
+            <UserCard
+              avatarUrl={user.avatar_url}
+              userName={user.login}
+            />
+          )}
+        />
       )}
     </article>
   );
@@ -48,8 +50,7 @@ Home.propTypes = {
     users: React.PropTypes.arrayOf(React.PropTypes.shape({
       id: React.PropTypes.number.isRequired,
       avatar_url: React.PropTypes.string.isRequired,
-      login: React.PropTypes.string.isRequired,
-      total_stargazers: React.PropTypes.number.isRequired
+      login: React.PropTypes.string.isRequired
     }))
   })
 }

@@ -1,0 +1,7 @@
+tunnels:
+  http:
+    proto: http
+    addr: 1337
+  assets:
+    proto: http
+    addr: 7331
