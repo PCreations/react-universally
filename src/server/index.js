@@ -8,11 +8,12 @@ import path from 'path';
 import appRoot from 'app-root-path';
 import express from 'express';
 import useragent from 'express-useragent';
-import graphqlHTTP from 'express-graphql';
 import type { $Request, $Response, NextFunction } from 'express';
 import compression from 'compression';
 import hpp from 'hpp';
 import helmet from 'helmet';
+import proxy from 'http-proxy-middleware';
+
 import universalMiddleware from './middleware/universalMiddleware';
 import { notEmpty } from '../shared/universal/utils/guards';
 
@@ -20,6 +21,8 @@ import schema from './schema'
 
 global.window = {}
 global.window.addEventListener = function() {}
+
+const apiProxy = proxy({ target: process.env.API_HOST });
 
 const appRootPath = appRoot.toString();
 
@@ -34,10 +37,8 @@ app.use(hpp());
 
 app.use(useragent.express());
 
-app.use('/graphql', graphqlHTTP({
-  graphiql: true,
-  schema
-}));
+app.use('/graphql', apiProxy);
+app.use('/graphiql', apiProxy);
 
 // Content Security Policy
 app.use(helmet.contentSecurityPolicy({

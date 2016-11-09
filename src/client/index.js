@@ -13,8 +13,9 @@ import App from '../shared/universal/components/App';
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
+
 const client = new ApolloClient({
-  networkInterface: createNetworkInterface('http://localhost:1337/graphql'),
+  networkInterface: createNetworkInterface({ uri: `${process.env.NOW_URL}/graphql` }),
   initialState: window.__APOLLO_STATE__
 });
 

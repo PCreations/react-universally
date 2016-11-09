@@ -164,39 +164,6 @@ function webpackConfigFactory({ target, mode }, { json }) {
       ],
     },
     plugins: removeEmpty([
-      /*ifClient(new SWPrecacheWebpackPlugin({
-        cacheId: 'react-universally-pwa',
-        filename: 'react-universally-pwa.sw.js',
-        filepath: path.resolve(appRootPath, `./public/react-universally-pwa.sw.js`),
-        maximumFileSizeToCacheInBytes: 4194304,
-        dynamicUrlToDependencies: {
-          '/': [
-            ...glob.sync(path.resolve(appRootPath, './build/client/*.js'))
-          ],
-          '/avatar_placeholder.png': [path.resolve(appRootPath, './public/avatar_placeholder.png')],
-          '/material-icons.css': [path.resolve(appRootPath, './public/material-icons.css')],
-          '/polyfill.min.js': [path.resolve(appRootPath, './public/polyfill.min.js')],
-          '/material.css': [path.resolve(appRootPath, './public/material.js')],
-          '/globals.css': [path.resolve(appRootPath, './public/globals.css')],
-          '/material.js': [path.resolve(appRootPath, './public/material.js')],
-          '/android-chrome-192x192.png': [path.resolve(appRootPath, './public/android-chrome-192x192.png')],
-          '/apple-touch-icon.png': [path.resolve(appRootPath, './public/apple-touch-icon.png')],
-          '/browserconfig.xml': [path.resolve(appRootPath, './public/browserconfig.xml')],
-          '/favicon-16x16.png': [path.resolve(appRootPath, './public/favicon-16x16.png')],
-          '/favicon-32x32.png': [path.resolve(appRootPath, './public/favicon-32x32.png')],
-          '/favicon.ico': [path.resolve(appRootPath, './public/favicon.ico')],
-          '/mstile-150x150.png': [path.resolve(appRootPath, './public/mstile-150x150.png')],
-          '/safari-pinned-tab.svg': [path.resolve(appRootPath, './public/safari-pinned-tab.svg')],
-        },
-        runtimeCaching: [{
-          urlPattern: /https:\/\/avatars.githubusercontent.com\//,
-          // Effectively "stale while revalidate".
-          handler: 'fastest'
-        }, {
-          // Use a network first strategy for everything else.
-          default: 'networkFirst'
-        }],
-      })),*/
       // We use this so that our generated [chunkhash]'s are only different if
       // the content for our respective chunks have changed.  This optimises
       // our long term browser caching strategy for our client bundle, avoiding

@@ -5,15 +5,16 @@ import { graphql } from 'react-apollo';
 
 import styles from './usercard.css';
 
-const UserCardCaption = CSSModules(({ username, loading, totalStargazers }) => (
+const UserCardCaption = CSSModules(({ login, loading, totalStargazers }) => (
   <span styleName='username'>
-    {`${username} (${loading ? 'loading stargazers...' : `${totalStargazers} stargazers`})`}
+    {`${login} (${loading ? 'loading stargazers...' : `${totalStargazers} stargazers`})`}
   </span>
 ), styles)
 
 const totalStargazersQuery = gql`
   query TotalStargazersForUser($username: String!) {
     userByUsername(username: $username) {
+      login,
       total_stargazers
     }
   }
@@ -27,10 +28,10 @@ const UserCardCaptionContainer = graphql(totalStargazersQuery, {
     }
   }),
   props: ({ ownProps, data }) => {
-    console.log(data)
     return {
       ...ownProps,
       loading: data.loading,
+      login: data.loading ? 'loading..' : data.userByUsername.login,
       totalStargazers: !data.loading && data.userByUsername.total_stargazers
     }
   }

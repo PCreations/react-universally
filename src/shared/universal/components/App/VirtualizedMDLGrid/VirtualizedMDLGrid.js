@@ -1,6 +1,7 @@
 import React from 'react'
 import { Grid, Cell } from 'react-mdl'
 import { AutoSizer, List, InfiniteLoader } from 'react-virtualized'
+import shallowCompare from 'react-addons-shallow-compare'
 
 const MATERIAL_DEVICES = {
   PHONE: 'phone',
@@ -35,6 +36,7 @@ class VirtualizedMDLGrid extends React.Component {
     this.state = {
       device: MATERIAL_DEVICES.PHONE
     }
+    this.isRowLoaded = this.isRowLoaded.bind(this)
   }
 
   componentDidMount() {
@@ -43,14 +45,24 @@ class VirtualizedMDLGrid extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextState.device !== this.state.device
+    const shouldUpdate = shallowCompare(this, nextProps, nextState)
+    return shouldUpdate
+  }
+
+  isRowLoaded({ index }) {
+    const {
+      itemsPerPage,
+      items,
+      [this.state.device]: currentColumnCount
+    } = this.props
+    console.log(`(index = ${index}, first row item index = ${index * currentColumnCount}) => is page ${Math.floor(index * currentColumnCount / itemsPerPage)} loaded ?`, !!items[index * currentColumnCount])
+    return !!items[index * currentColumnCount]
   }
 
   render() {
     const {
       style,
       className,
-      isRowLoaded,
       loadMoreRows,
       minimumBatchSize,
       threshold,
@@ -61,7 +73,7 @@ class VirtualizedMDLGrid extends React.Component {
       <AutoSizer>
         {({ height, width }) => infinite ? (
           <InfiniteLoader
-            isRowLoaded={isRowLoaded}
+            isRowLoaded={this.isRowLoaded}
             loadMoreRows={loadMoreRows}
             minimumBatchSize={minimumBatchSize}
             rowCount={remoteRowCount}

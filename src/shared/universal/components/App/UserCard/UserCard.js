@@ -7,11 +7,13 @@ import { graphql } from 'react-apollo';
 import UserCardCaption from './UserCardCaption';
 import styles from './usercard.css';
 
-const UserCard = ({ avatarUrl = '/avatar_placeholder.png', userName }) => (
+const UserCard = ({ avatarUrl = '/avatar_placeholder.png', userName, totalStargazers }) => (
   <Card shadow={0} styleName='card' style={{background: `url(${avatarUrl}) center / cover`}}>
     <CardTitle expand />
     <CardActions styleName='actions'>
-      <UserCardCaption username={userName}/>
+      <span styleName='username'>
+        {`${userName} (${typeof totalStargazers === 'undefined' ? 'loading stargazers...' : `${totalStargazers} stargazers`})`}
+      </span>
     </CardActions>
   </Card>
 )

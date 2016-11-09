@@ -31,7 +31,7 @@ function universalReactAppMiddleware(request: $Request, response: $Response) {
 
   const client = new ApolloClient({
     ssrMode: true,
-    networkInterface: createNetworkInterface({ uri: 'http://localhost:1337/graphql' })
+    networkInterface: createNetworkInterface({ uri: `${process.env.NOW_URL}/graphql` })
   });
 
   // Create the application react element.
