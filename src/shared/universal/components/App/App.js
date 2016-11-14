@@ -14,8 +14,7 @@ function App() {
         <CodeSplit module={System.import('./Shell')}>
           { Shell => Shell && <Shell {...routerProps} /> }
         </CodeSplit>
-      }
-    />
+      }/>
   )
 }
 

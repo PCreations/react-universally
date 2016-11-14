@@ -46,30 +46,23 @@ function App() {
         script={[
           { src: '/js/polyfill.min.js', type: 'text/javascript' },
           { src: '/js/material.js', type: 'text/javascript' }
-        ]}
-      />
+        ]}/>
       <Layout fixedHeader fixedDrawer>
         <Header waterfall>
-          <HeaderRow title="React Universally">
+          <HeaderRow title="diggger">
             <Textfield
                 value=""
                 onChange={() => {}}
                 label="Search"
                 expandable
-                expandableIcon="search"
-            />
-          </HeaderRow>
-          <HeaderRow>
-            <Navigation>
-              <Link to="/">Home</Link>
-              <Link to="/about">About</Link>
-            </Navigation>
+                expandableIcon="search"/>
           </HeaderRow>
         </Header>
-        <Drawer title="React Universally">
+        <Drawer title="diggger">
           <Navigation>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
+            <Link to="/"><i className='material-icons'>home</i> Accueil</Link>
+            <Link to="/agenda"><i className='material-icons'>event</i> Agenda</Link>
+            <Link to="/digggers"><i className='material-icons'>group</i> Digggers</Link>
           </Navigation>
         </Drawer>
         <Content>
@@ -80,17 +73,7 @@ function App() {
               <CodeSplit module={System.import('../Home')}>
                 { Home => Home && <Home {...routerProps} /> }
               </CodeSplit>
-            }
-          />
-
-          <Match
-            pattern="/about"
-            render={routerProps =>
-              <CodeSplit module={System.import('../About')}>
-                { About => About && <About {...routerProps} /> }
-              </CodeSplit>
-            }
-          />
+            }/>
 
           <Miss component={Error404} />
         </Content>

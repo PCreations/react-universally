@@ -1,0 +1,179 @@
+.container {
+  height: 545px;
+  width: 100%;
+  margin: auto;
+}
+
+.title {
+  padding-right: 0;
+  display: block;
+  margin: 0;
+  position: relative;
+}
+
+.placeholder-title {
+  composes: title;
+  padding: 15px;
+}
+
+.avatar {
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  margin-right: 9pt;
+  vertical-align: middle;
+  border-radius: 50%!important;
+}
+
+.small-avatar {
+  composes: avatar;
+  width: 32px;
+  height: 32px;
+}
+
+.diggger-name-container {
+  display: inline-block;
+  vertical-align: middle;
+  width: 72%;
+}
+
+.text-placeholder {
+  background-color: #b0b0bb;
+  width: 70%;
+  height: 10px;
+  margin-bottom: 5px;
+}
+
+.media {
+  width: 100%;
+}
+
+.concert-name-placeholder {
+  margin: 24px 1px 1px;
+  background-color: #b0b0bb;
+  width: 100%;
+  height: 20px;
+  margin-bottom: 16px;
+}
+
+.diggger-url {
+  display: block;
+  -webkit-transition: all .15s ease-out;
+  transition: all .15s ease-out;
+}
+
+.diggger-url:hover {
+  background-color: #eee;
+}
+
+.diggger-name-prefix {
+  text-transform: uppercase;
+  color: #b0b0bb;
+  font-size: 9.5px;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: .3px;
+  line-height: 10px;
+  margin-top: 3px;
+}
+
+.diggger-name {
+  font-size: 15px;
+  line-height: 18px;
+  letter-spacing: -.4px;
+  max-height: 38px;
+  overflow: hidden;
+  font-weight: 600;
+  font-style: normal;
+  text-transform: none;
+  color: #d33359;
+}
+
+.media-container {
+  position: relative;
+  padding-bottom: 56%;
+  padding-top: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.play-button {
+  height: 64px;
+  width: 64px;
+  margin-left: -32px;
+  margin-top: -32px;
+  background: url(/images/play_button.png) no-repeat;
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  cursor: pointer;
+}
+
+.concert-text {
+  width: 100%;
+}
+
+.concert-title {
+  font-size: 19px;
+  line-height: 19px;
+  color: #3c3c3c;
+  font-weight: 300;
+  padding: 24px 1px 1px;
+  margin: 0;
+  width: 83%;
+  text-transform: uppercase;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.label {
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+  display: inline-block;
+  position: relative;
+  margin-bottom: auto;
+  padding: .25rem .5rem;
+  font-size: .6875rem;
+  background-color: #008cba;
+  color: #fff;
+}
+
+.label-in-contest {
+  composes: label;
+  background-color: #f08a24;
+}
+
+.label-contest {
+  composes: label;
+  background-color: #43ac6a;
+}
+
+.info {
+  font-weight: 400;
+  font-size: 13px;
+  margin-top: 10px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.icon {
+  vertical-align: bottom;
+}
+
+.tags {
+  padding-bottom: 8px;
+}
+
+.tag {
+  padding: 2px;
+  border: none;
+  background-color: transparent;
+  color: #000;
+  font-size: 9pt;
+  margin-bottom: 7px;
+  margin-right: 2px;
+}

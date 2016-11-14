@@ -9,7 +9,7 @@ import { Button } from 'react-mdl';
 
 import VirtualizedMDLGrid from '../VirtualizedMDLGrid';
 import styles from './home.css';
-import UserCard from '../UserCard';
+import { ConcertCardPlaceholder, ConcertCard } from '../ConcertCard';
 
 const usersQuery = gql`
   query User($since: Int) {
@@ -30,6 +30,12 @@ const usersWithTotalStargazersQuery = gql`
   }
 `
 
+let concerts = []
+
+for (let i=0; i<30; i++) {
+  concerts.push(i)
+}
+
 class Home extends React.Component {
 
   componentWillReceiveProps(nextProps) {
@@ -49,28 +55,36 @@ class Home extends React.Component {
       <div>
         <article styleName='container'>
           <Helmet title="Home" />
-          {loading ? <p>loading...</p> : (
-            <VirtualizedMDLGrid
-              infinite
-              col={3}
-              tablet={2}
-              phone={1}
-              items={users}
-              itemsPerPage={30}
-              rowHeight={217}
-              getCellKey={user => user.id}
-              renderItem={user => (
-                <UserCard
-                  avatarUrl={user.avatar_url}
-                  userName={user.login}
-                  totalStargazers={user.total_stargazers}
-                />
-              )}
-              loadMoreRows={loadNextPage}
-              minimumBatchSize={1}
-              threshold={1}
-            />
-          )}
+          <VirtualizedMDLGrid
+            col={3}
+            tablet={2}
+            phone={1}
+            items={concerts}
+            itemsPerPage={30}
+            rowHeight={560}
+            renderItem={concert => (
+              <ConcertCard
+                digggerUrl={'http://google.com'}
+                avatarUrl={'http://cdn.diggger.com/media/cache/15/68/15686ca3e1088b4c84a5c5c39e38b391.jpg'}
+                digggerName={'Mirolepralot'}
+                thumbnailUrl={'//i.ytimg.com/vi/DreeCbl8s9E/hqdefault.jpg'}
+                concertTitle={'Les inrocks festival'}
+                hasContest={true}
+                isRegisteredInContest={false}
+                liveDate={'ven 18 Nov 2016'}
+                venue={'La Cigale'}
+                price={'99€ Pass 3 jours'}
+                tags={['pop / rock', 'electro']}
+                otherAttendees={[{
+                  name: 'Ernoldsame',
+                  url: 'http://google.com',
+                  avatarUrl: 'http://cdn.diggger.com/media/cache/70/78/70785843a612f8d15f54c5e3ee77a966.jpg'
+                }, {
+                  name: 'Olivier Jalbert',
+                  url: 'http://google.com',
+                  avatarUrl: 'http://cdn.diggger.com/media/cache/17/e2/17e2a10c17a5b9b0c31928701eb6c1d9.jpg'
+                }]}/>
+            )}/>
         </article>
       </div>
     );
@@ -157,4 +171,4 @@ const withData = compose(
   withTotalStargazers
 )
 
-export default withData(CSSModules(Home, styles));
+export default CSSModules(Home, styles);
