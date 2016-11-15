@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 import CSSModules from 'react-css-modules';
 import { Button } from 'react-mdl';
 
+import Counter from '../Counter';
 import VirtualizedMDLGrid from '../VirtualizedMDLGrid';
 import styles from './home.css';
 import UserCard from '../UserCard';
@@ -33,10 +34,10 @@ const usersWithTotalStargazersQuery = gql`
 class Home extends React.Component {
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.users && this.props.users && nextProps.users.length !== this.props.users.length) {
+    /*if (nextProps.users && this.props.users && nextProps.users.length !== this.props.users.length) {
       console.log("NEED FETCHING TOTAL STARGAZERS SINCE ", this.props.users[this.props.users.length - 1].id)
       this.props.loadNextTotalStargazersPage()
-    }
+    }*/
   }
 
   render() {
@@ -47,6 +48,7 @@ class Home extends React.Component {
     } = this.props
     return (
       <div>
+        <Counter/>
         <article styleName='container'>
           <Helmet title="Home" />
           {loading ? <p>loading...</p> : (
@@ -63,13 +65,11 @@ class Home extends React.Component {
                 <UserCard
                   avatarUrl={user.avatar_url}
                   userName={user.login}
-                  totalStargazers={user.total_stargazers}
-                />
+                  totalStargazers={user.total_stargazers}/>
               )}
               loadMoreRows={loadNextPage}
               minimumBatchSize={1}
-              threshold={1}
-            />
+              threshold={1}/>
           )}
         </article>
       </div>
@@ -90,6 +90,9 @@ Home.propTypes = {
 }
 
 const withUsers = graphql(usersQuery, {
+  options: {
+    ssr: false
+  },
   props({ data: { loading, users, fetchMore } }) {
     return {
       loading,
@@ -157,4 +160,4 @@ const withData = compose(
   withTotalStargazers
 )
 
-export default withData(CSSModules(Home, styles));
+export default withUsers(CSSModules(Home, styles));
