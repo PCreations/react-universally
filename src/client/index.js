@@ -8,14 +8,43 @@ import ReactHotLoader from './components/ReactHotLoader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
+import { Client } from 'subscriptions-transport-ws';
+import { print } from 'graphql-tag/printer';
 
 import App from '../shared/universal/components/App';
+
+
+const wsClient = new Client('ws://localhost:8080');
+
+// quick way to add the subscribe and unsubscribe functions to the network interface
+const addGraphQLSubscriptions = (networkInterface, wsClient) => Object.assign(networkInterface, {
+  subscribe: (request, handler) => wsClient.subscribe({
+    query: print(request.query),
+    variables: request.variables,
+  }, handler),
+  unsubscribe: (id) => {
+    wsClient.unsubscribe(id);
+  },
+});
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
 
+const networkInterface = createNetworkInterface({
+  uri: `${process.env.NOW_URL}/graphql`,
+  opts: {
+    credentials: 'same-origin',
+  },
+  transportBatching: true
+})
+
+const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+  networkInterface,
+  wsClient,
+);
+
 const client = new ApolloClient({
-  networkInterface: createNetworkInterface({ uri: `${process.env.NOW_URL}/graphql` }),
+  networkInterface: networkInterfaceWithSubscriptions,
   initialState: window.__APOLLO_STATE__
 });
 
