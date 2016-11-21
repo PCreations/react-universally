@@ -15,7 +15,12 @@ import App from '../shared/universal/components/App';
 const container = document.querySelector('#app');
 
 const client = new ApolloClient({
-  networkInterface: createNetworkInterface({ uri: `${process.env.NOW_URL}/graphql` }),
+  networkInterface: createNetworkInterface({
+    uri: `${process.env.NOW_URL}/graphql`,
+    opts: {
+      credentials: 'same-origin',
+    },
+  }),
   initialState: window.__APOLLO_STATE__
 });
 

@@ -1,5 +1,7 @@
 import React from 'react'
 import { Card, CardTitle, CardText, Tooltip } from 'react-mdl';
+import gql from 'graphql-tag';
+import Fragment from 'graphql-fragments';
 import CSSModules from 'react-css-modules';
 
 import style from './style.css'
@@ -48,8 +50,8 @@ const ConcertCard = CSSModules(({
       <p>{'Aussi dans l\'agenda de :'}</p>
       {otherAttendees.map(attendee => (
         <a href={attendee.url}>
-          <Tooltip label={attendee.name} position='bottom'>
-            <img styleName='small-avatar' src={attendee.avatarUrl}/>
+          <Tooltip label={attendee.displayName} position='bottom'>
+            <img styleName='small-avatar' src={attendee.avatar}/>
           </Tooltip>
         </a>
       ))}
@@ -74,7 +76,7 @@ const ConcertCard = CSSModules(({
       </p>
       {tags && (
         <div styleName='tags'>
-          {tags.map(tag => <span styleName='tag'>{`#${tag}`}</span>)}
+          {tags.map(tag => <span styleName='tag' key={tag}>{`#${tag}`}</span>)}
         </div>
       )}
       {otherAttendees && <OtherAttendees/>}
@@ -104,10 +106,31 @@ ConcertCard.propTypes = {
   price: React.PropTypes.string.isRequired,
   tags: React.PropTypes.arrayOf(React.PropTypes.string),
   otherAttendees: React.PropTypes.arrayOf(React.PropTypes.shape({
-    name: React.PropTypes.string.isRequired,
+    displayName: React.PropTypes.string.isRequired,
     url: React.PropTypes.string.isRequired,
-    avatarUrl: React.PropTypes.string.isRequired
+    avatar: React.PropTypes.string.isRequired
   }))
+}
+
+
+ConcertCard.fragments = {
+  concert: new Fragment(gql`
+    fragment ConcertCard on Concert {
+      id
+      thumbnailUrl
+      concertTitle
+      contest
+      liveDate
+      venue
+      price
+      tags
+      attendees {
+        id
+        displayName
+        avatar(dim: "32x32")
+      }
+    }
+  `)
 }
 
 export default ConcertCard

@@ -70,8 +70,8 @@ function App() {
             exactly
             pattern="/"
             render={routerProps =>
-              <CodeSplit module={System.import('../Home')}>
-                { Home => Home && <Home {...routerProps} /> }
+              <CodeSplit module={System.import('../Agenda')}>
+                { Agenda => Agenda && <Agenda {...routerProps} /> }
               </CodeSplit>
             }/>
 

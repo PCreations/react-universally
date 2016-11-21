@@ -96,7 +96,7 @@ app.use((err: ?Error, req: $Request, res: $Response, next: NextFunction) => { //
 
 // Create an http listener for our express app.
 const port = parseInt(notEmpty(process.env.SERVER_PORT), 10);
-const listener = app.listen(port, () =>
+const listener = app.listen(port, '0.0.0.0', () =>
   console.log(`Server listening on port ${port}`)
 );
 
