@@ -1,5 +1,6 @@
 /* @flow */
 
+import util from 'util';
 import React from 'react';
 import Helmet from 'react-helmet';
 import { graphql, compose } from 'react-apollo';
@@ -12,24 +13,6 @@ import VirtualizedMDLGrid from '../VirtualizedMDLGrid';
 import styles from './home.css';
 import UserCard from '../UserCard';
 
-const usersQuery = gql`
-  query User($since: Int) {
-    users(since: $since) {
-      login
-      id
-      avatar_url
-    }
-  }
-`
-
-const usersWithTotalStargazersQuery = gql`
-  query UserWithTotalStargazers($since: Int) {
-    users(since: $since) {
-      id,
-      total_stargazers
-    }
-  }
-`
 
 class Home extends React.Component {
 
@@ -89,9 +72,28 @@ Home.propTypes = {
   loadNextTotalStargazersPage: React.PropTypes.func.isRequired,
 }
 
-const withUsers = graphql(usersQuery, {
+
+const USERS_QUERY = gql`
+  query User($since: Int) {
+    users(since: $since) {
+      ...UserCard
+    }
+  }
+`
+
+const usersWithTotalStargazersQuery = gql`
+  query UserWithTotalStargazers($since: Int) {
+    users(since: $since) {
+      id,
+      total_stargazers
+    }
+  }
+`
+
+const withUsers = graphql(USERS_QUERY, {
   options: {
-    ssr: false
+    ssr: false,
+    fragments: UserCard.fragments.user.fragments()
   },
   props({ data: { loading, users, fetchMore } }) {
     return {
