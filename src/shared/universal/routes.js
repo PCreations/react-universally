@@ -6,7 +6,7 @@ import Error404 from './components/App/Error404';
 import Home from './components/App/Home';
 
 export default (
-  <Route path="/" component={Ap}>
+  <Route path="/" component={App}>
     <IndexRoute component={Home}/>
     <Route path="about" component={About}/>
     <Route path="*" component={Error404}/>

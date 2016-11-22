@@ -1,5 +1,3 @@
-/* @flow */
+import AgendaPage from './AgendaPage'
 
-import Agenda from './Agenda';
-
-export default Agenda;
+export default AgendaPage

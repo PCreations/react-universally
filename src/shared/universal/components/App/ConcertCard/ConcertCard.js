@@ -49,7 +49,7 @@ const ConcertCard = CSSModules(({
     <div>
       <p>{'Aussi dans l\'agenda de :'}</p>
       {otherAttendees.map(attendee => (
-        <a href={attendee.url}>
+        <a href={attendee.url} key={attendee.url}>
           <Tooltip label={attendee.displayName} position='bottom'>
             <img styleName='small-avatar' src={attendee.avatar}/>
           </Tooltip>

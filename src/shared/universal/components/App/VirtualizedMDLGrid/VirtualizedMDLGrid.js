@@ -113,7 +113,7 @@ class VirtualizedMDLGrid extends React.Component {
           return (
             <Grid style={style} key={index}>
               {_items.map((item, i) => (
-                <Cell col={currentTotalColumn / currentColumnCount} key={getCellKey ? getCellKey(item) : i }>
+                <Cell col={currentTotalColumn / currentColumnCount} key={getCellKey ? getCellKey(item, i) : i }>
                   {renderItem(item, isScrolling)}
                 </Cell>
               ))}

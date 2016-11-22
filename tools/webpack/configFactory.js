@@ -164,6 +164,51 @@ function webpackConfigFactory({ target, mode }, { json }) {
       ],
     },
     plugins: removeEmpty([
+      //ifClient(new SWPrecacheWebpackPlugin({
+      //  cacheId: 'diggger',
+      //  filename: 'diggger.sw.js',
+      //  filepath: path.resolve(appRootPath, `./public/diggger.sw.js`),
+      //  maximumFileSizeToCacheInBytes: 4194304,
+      //  staticFileGlobs: [
+      //    `../../public/js/**/*.js`,
+      //    `../../public/css/**/*.css`,
+      //    `../../public/images/**/*`,
+      //  ],
+      //  dynamicUrlToDependencies: {
+      //    '/': [
+      //      ...glob.sync(path.resolve(appRootPath, './build/client/*.js')),
+      //      ...glob.sync(path.resolve(appRootPath, './public/js/**/*.js')),
+      //      ...glob.sync(path.resolve(appRootPath, './public/css/**/*.css')),
+      //      ...glob.sync(path.resolve(appRootPath, './public/images/**/*')),
+      //    ]
+      //  },
+      //  navigateFallback: '/',
+      //  runtimeCaching: [{
+      //    urlPattern: /https:\/\/8b2cace4\.ngrok\.io\/graphql/,
+      //    handler: 'fastest'
+      //  }, {
+      //    urlPattern: /.+youtube\.com.+/,
+      //    handler: 'cacheFirst',
+      //    options: {
+      //      cache: {
+      //        name: 'image-cache',
+      //        maxEntries: 50
+      //      }
+      //    }
+      //  }, {
+      //    urlPattern: /https:\/\/4ffb1122\.ngrok\.io\/media\/cache\/.+/,
+      //    handler: 'cacheFirst',
+      //    options: {
+      //      cache: {
+      //        name: 'image-cache',
+      //        maxEntries: 50
+      //      }
+      //    }
+      //  }, {
+      //    default: 'networkFirst'
+      //  }]
+      //})),
+
       // We use this so that our generated [chunkhash]'s are only different if
       // the content for our respective chunks have changed.  This optimises
       // our long term browser caching strategy for our client bundle, avoiding

@@ -4,7 +4,7 @@ import React from 'react';
 import { Match, Miss, Link } from 'react-router';
 import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
-import { Layout, Header, HeaderRow, Textfield, Drawer, Navigation, Content } from 'react-mdl';
+import { Layout, Header, HeaderRow, HeaderTabs, Tab, Textfield, Drawer, Navigation, Content } from 'react-mdl';
 import CSSModules from 'react-css-modules';
 
 import styles from './shell.css';
@@ -49,7 +49,7 @@ function App() {
         ]}/>
       <Layout fixedHeader fixedDrawer>
         <Header waterfall>
-          <HeaderRow title="diggger">
+          <HeaderRow title="POC Apollo GraphQL">
             <Textfield
                 value=""
                 onChange={() => {}}
@@ -57,11 +57,18 @@ function App() {
                 expandable
                 expandableIcon="search"/>
           </HeaderRow>
+          <Match
+            pattern="/agenda/:date"
+            render={routerProps => (
+              <CodeSplit module={System.import('../Agenda/MonthHeaderTabs')}>
+                { MonthHeaderTabs => MonthHeaderTabs && <MonthHeaderTabs {...routerProps} /> }
+              </CodeSplit>
+            )}/>
         </Header>
-        <Drawer title="diggger">
+        <Drawer title="POC Apollo GraphQL">
           <Navigation>
             <Link to="/"><i className='material-icons'>home</i> Accueil</Link>
-            <Link to="/agenda"><i className='material-icons'>event</i> Agenda</Link>
+            <Link to="/agenda/"><i className='material-icons'>event</i> Agenda</Link>
             <Link to="/digggers"><i className='material-icons'>group</i> Digggers</Link>
           </Navigation>
         </Drawer>
@@ -69,6 +76,14 @@ function App() {
           <Match
             exactly
             pattern="/"
+            render={routerProps =>
+              <CodeSplit module={System.import('../Feed')}>
+                { Feed => Feed && <Feed {...routerProps} /> }
+              </CodeSplit>
+            }/>
+
+          <Match
+            pattern="/agenda/:date"
             render={routerProps =>
               <CodeSplit module={System.import('../Agenda')}>
                 { Agenda => Agenda && <Agenda {...routerProps} /> }
