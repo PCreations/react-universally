@@ -7,7 +7,7 @@ const Program = ({
   time,
   title
 }) => (
-  <Card style={{ width: '100%', height: '200px' }} shadow={1}>
+  <Card style={{ width: '100%', height: '250px' }} shadow={1}>
     <CardTitle style={{ background: `url(${thumbnail}) center / cover`, width: '100%', height: '110px' }}/>
     <CardText>
       <span style={{ display: 'block' }}>{time}</span>
@@ -23,7 +23,7 @@ const mockPrograms = Array(6).fill({
 })
 
 const TVProgramGrid = ({ programs = mockPrograms }) => (
-  <Grid>
+  <Grid style={{ padding: 0 }}>
     {programs.map((program, i) => (
       <Cell col={4} key={i}>
         <Program {...program}/>
