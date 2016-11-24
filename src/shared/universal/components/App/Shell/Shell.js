@@ -4,7 +4,7 @@ import React from 'react';
 import { Match, Miss, Link } from 'react-router';
 import Helmet from 'react-helmet';
 import CodeSplit from 'code-split-component';
-import { Layout, Header, HeaderRow, Textfield, Drawer, Navigation, Content } from 'react-mdl';
+import { Layout, Header, HeaderRow, HeaderTabs, Tab, Textfield, Drawer, Navigation, Content } from 'react-mdl';
 import CSSModules from 'react-css-modules';
 
 import styles from './shell.css';
@@ -46,30 +46,21 @@ function App() {
         script={[
           { src: '/js/polyfill.min.js', type: 'text/javascript' },
           { src: '/js/material.js', type: 'text/javascript' }
-        ]}
-      />
+        ]}/>
       <Layout fixedHeader fixedDrawer>
         <Header waterfall>
-          <HeaderRow title="React Universally">
+          <HeaderRow title="POC TV Mag GraphQL">
             <Textfield
                 value=""
                 onChange={() => {}}
                 label="Search"
                 expandable
-                expandableIcon="search"
-            />
-          </HeaderRow>
-          <HeaderRow>
-            <Navigation>
-              <Link to="/">Home</Link>
-              <Link to="/about">About</Link>
-            </Navigation>
+                expandableIcon="search"/>
           </HeaderRow>
         </Header>
-        <Drawer title="React Universally">
+        <Drawer title="POC TV Mag GraphQL">
           <Navigation>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
+            <Link to="/"><i className='material-icons'>home</i> Accueil</Link>
           </Navigation>
         </Drawer>
         <Content>
@@ -80,18 +71,7 @@ function App() {
               <CodeSplit module={System.import('../Home')}>
                 { Home => Home && <Home {...routerProps} /> }
               </CodeSplit>
-            }
-          />
-
-          <Match
-            pattern="/about"
-            render={routerProps =>
-              <CodeSplit module={System.import('../About')}>
-                { About => About && <About {...routerProps} /> }
-              </CodeSplit>
-            }
-          />
-
+            }/>
           <Miss component={Error404} />
         </Content>
       </Layout>
