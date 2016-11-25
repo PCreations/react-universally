@@ -6,11 +6,12 @@ import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router';
 import ReactHotLoader from './components/ReactHotLoader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { ApolloClient, createNetworkInterface } from 'apollo-client';
+import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { Client } from 'subscriptions-transport-ws';
 import { print } from 'graphql-tag/printer';
 
+import configureStore from './configureStore'
 import App from '../shared/universal/components/App';
 
 
@@ -30,12 +31,12 @@ const addGraphQLSubscriptions = (networkInterface, wsClient) => Object.assign(ne
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
 
-const networkInterface = createNetworkInterface({
+const networkInterface = createBatchingNetworkInterface({
   uri: `${process.env.NOW_URL}/graphql`,
   opts: {
     credentials: 'same-origin',
   },
-  transportBatching: true
+  batchInterval: 50
 })
 
 const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
@@ -47,6 +48,8 @@ const client = new ApolloClient({
   networkInterface: networkInterfaceWithSubscriptions,
   initialState: window.__APOLLO_STATE__
 });
+
+const store = configureStore(client.reducer())
 
 if ('serviceWorker' in navigator) {
   // Your service-worker.js *must* be located at the top-level directory relative to your site.
@@ -93,7 +96,7 @@ function renderApp(TheApp) {
   render(
     <ReactHotLoader>
       <BrowserRouter>
-        <ApolloProvider client={client}>
+        <ApolloProvider store={store} client={client}>
           <TheApp/>
         </ApolloProvider>
       </BrowserRouter>

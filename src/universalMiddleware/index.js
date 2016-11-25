@@ -8,6 +8,7 @@ import { ApolloProvider } from 'react-apollo';
 
 import render from './render';
 import App from '../shared/universal/components/App';
+import configureStore from '../client/configureStore';
 
 /**
  * An express middleware that is capabable of doing React server side rendering.
@@ -34,13 +35,15 @@ function universalReactAppMiddleware(request: $Request, response: $Response) {
     networkInterface: createNetworkInterface({ uri: `${process.env.NOW_URL}/graphql` })
   });
 
+  const store = configureStore(client.reducer())
+
   // Create the application react element.
   const app = (
     <ServerRouter
       location={request.url}
       context={context}
     >
-      <ApolloProvider client={client}>
+      <ApolloProvider store={store} client={client}>
         <App/>
       </ApolloProvider>
     </ServerRouter>
