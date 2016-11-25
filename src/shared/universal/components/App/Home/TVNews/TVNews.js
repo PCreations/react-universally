@@ -1,4 +1,7 @@
 import React from 'react'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+import moment from 'moment'
 import {
   Card,
   CardTitle,
@@ -7,11 +10,6 @@ import {
   ListItem
 } from 'react-mdl'
 
-
-const mockNews = Array(4).fill({
-  time: '11h05',
-  text: 'Primaire à droite : à quoi ressemblera le débat de l’entre-deux-tours ?'
-})
 
 const NewsList = ({
   news
@@ -27,15 +25,51 @@ const NewsList = ({
 )
 
 const TVNews = ({
-  thumbnail = 'http://i.f1g.fr/media/eidos/298x167_crop/2016/11/24/XVM84cdb3f6-b227-11e6-b27f-7a21f37b2c6a.jpg',
-  news = mockNews
+  thumbnail,
+  title,
+  time,
+  news
 }) => (
   <Card shadow={1} style={{ width: '100%' }}>
-    <CardTitle expand style={{ background: `url(${thumbnail}) center / cover`, height: '167px' }}/>
+    <CardTitle expand style={{ color: '#fff', background: `url(${thumbnail}) center / cover`, height: '167px', textAlign: 'center' }}>
+      {time} - {title}
+    </CardTitle>
     <CardText>
       <NewsList news={news}/>
     </CardText>
   </Card>
 )
 
-export default TVNews
+const newsQuery = gql`
+  {
+    heroNews: headlines(type: INFO) {
+      thumbnail,
+      title,
+      time
+    }
+    news: headlines(type: INFO) {
+      thumbnail,
+      title,
+      time
+    }
+  }
+`
+
+const withNews = graphql(newsQuery, {
+  props({ data: { heroNews, news }}) {
+    const _heroNews = heroNews && heroNews[0]
+    const _news = news && news.slice(1,4)
+    return {
+      thumbnail: _heroNews && _heroNews.thumbnail,
+      title: _heroNews && _heroNews.title,
+      time: _heroNews && moment(_heroNews.time).format('HH[h]mm'),
+      news: (_news || []).map(n => ({
+        text: n.title,
+        time: moment(n.time).format('HH[h]mm')
+      }))
+    }
+  }
+})
+
+
+export default withNews(TVNews)

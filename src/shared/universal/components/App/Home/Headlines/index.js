@@ -1,3 +1,7 @@
-import Headlines from './Headlines'
+import Headlines, { HEADLINES_TYPES } from './Headlines'
 
-export default Headlines
+
+export {
+  Headlines,
+  HEADLINES_TYPES
+}

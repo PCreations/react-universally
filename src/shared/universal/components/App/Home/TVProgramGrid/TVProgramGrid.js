@@ -1,8 +1,13 @@
 import React from 'react'
+import moment from 'moment'
+import Fragment from 'graphql-fragments'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import { Grid, Cell, Card, CardTitle, CardText } from 'react-mdl'
 
 
 const Program = ({
+  channel,
   thumbnail,
   time,
   title
@@ -10,19 +15,25 @@ const Program = ({
   <Card style={{ width: '100%', height: '250px' }} shadow={1}>
     <CardTitle style={{ background: `url(${thumbnail}) center / cover`, width: '100%', height: '110px' }}/>
     <CardText>
-      <span style={{ display: 'block' }}>{time}</span>
+      <span style={{ display: 'block' }}>{time} - {channel}</span>
       <strong>{title}</strong>
     </CardText>
   </Card>
 )
 
-const mockPrograms = Array(6).fill({
-  thumbnail: 'http://i.f1g.fr/media/ext/373x233_crop/api-tvmag.lefigaro.fr/img/000/130/13095290.jpg',
-  time: '21h00',
-  title: 'L\'affaire O.J Simpson'
-})
+Program.fragments = {
+  program: new Fragment(gql`
+    fragment Program on Program {
+      channel,
+      thumbnail
+      title
+      startAt
+    }
+  `)
+}
 
-const TVProgramGrid = ({ programs = mockPrograms }) => (
+
+const TVProgramGrid = ({ programs }) => (
   <Grid style={{ padding: 0 }}>
     {programs.map((program, i) => (
       <Cell col={4} key={i}>
@@ -32,4 +43,29 @@ const TVProgramGrid = ({ programs = mockPrograms }) => (
   </Grid>
 )
 
-export default TVProgramGrid
+const primeTimeProgramsQuery = gql`
+  {
+    tonightPrograms {
+      ...Program
+    }
+  }
+`
+
+const withPrimeTimePrograms = graphql(primeTimeProgramsQuery, {
+  options: {
+    fragments: Program.fragments.program.fragments()
+  },
+  props({ data: { loading, tonightPrograms } }) {
+    return {
+      programs: (tonightPrograms || []).map(program => ({
+        channel: program.channel,
+        thumbnail: program.thumbnail,
+        title: program.title,
+        time: moment.unix(program.startAt).format('HH[h]mm')
+      }))
+    }
+  }
+})
+
+
+export default withPrimeTimePrograms(TVProgramGrid)
