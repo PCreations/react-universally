@@ -93,6 +93,7 @@ const HEADLINES_QUERY = gql`
 const withHeadlines = graphql(HEADLINES_QUERY, {
   options({ type }) {
     return {
+      pollInterval: 60000,
       variables: { type },
       fragments: [
         HeroHeadline.fragments.headline.fragments(),

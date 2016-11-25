@@ -56,6 +56,9 @@ const newsQuery = gql`
 `
 
 const withNews = graphql(newsQuery, {
+  options: {
+    pollInterval: 60000
+  },
   props({ data: { heroNews, news }}) {
     const _heroNews = heroNews && heroNews[0]
     const _news = news && news.slice(1,4)
