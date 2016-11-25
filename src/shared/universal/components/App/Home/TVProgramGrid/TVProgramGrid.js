@@ -10,6 +10,8 @@ import Pager from '../../Pager'
 import paginationModux from '../../../../moduxes/pagination-list'
 
 
+const PROGRAMS_PER_PAGE = 6
+
 const Program = ({
   channel,
   thumbnail,
@@ -63,8 +65,8 @@ const TVProgramGrid = ({ programs }) => (
 )
 
 const primeTimeProgramsQuery = gql`
-  query TonightProgramsPage($offset: Int!) {
-    tonightPrograms(offset: $offset) {
+  query TonightProgramsPage($offset: Int!, $limit: Int!) {
+    tonightPrograms(offset: $offset, limit: $limit) {
       ...Program
     }
   }
@@ -74,7 +76,8 @@ const withPrimeTimePrograms = graphql(primeTimeProgramsQuery, {
   options: ({ offset }) => ({
     fragments: Program.fragments.program.fragments(),
     variables: {
-      offset
+      offset,
+      limit: PROGRAMS_PER_PAGE
     }
   }),
   props({ data: { loading, tonightPrograms } }) {
@@ -93,6 +96,6 @@ const TVProgramGridWithPrograms = withPrimeTimePrograms(TVProgramGrid)
 
 export default () => (
   <CurrentPageProvider>
-    {currentPage => <TVProgramGridWithPrograms offset={(currentPage - 1) * 6}/>}
+    {currentPage => <TVProgramGridWithPrograms offset={(currentPage - 1) * PROGRAMS_PER_PAGE}/>}
   </CurrentPageProvider>
 )

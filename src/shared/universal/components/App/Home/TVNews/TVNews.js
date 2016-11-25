@@ -15,6 +15,8 @@ import Pager from '../../Pager'
 import paginationModux from '../../../../moduxes/pagination-list'
 
 
+const NEWS_PER_PAGE = 3
+
 const NewsList = ({
   news
 }) => (
@@ -61,13 +63,14 @@ const TVNews = ({
 )
 
 const newsQuery = gql`
+  query NewsQuery($offset: Int!, $limit: Int!)
   {
-    heroNews: headlines(type: INFO) {
+    heroNews: headlines(type: INFO, offset: 0, limit: 1) {
       thumbnail,
       title,
       time
     }
-    news: headlines(type: INFO) {
+    news: headlines(type: INFO, offset: $offset, limit: $limit) {
       thumbnail,
       title,
       time
@@ -76,17 +79,20 @@ const newsQuery = gql`
 `
 
 const withNews = graphql(newsQuery, {
-  options: {
-    pollInterval: 60000
-  },
+  options: ({ offset }) => ({
+    pollInterval: 60000,
+    variables: {
+      offset,
+      limit: NEWS_PER_PAGE
+    }
+  }),
   props({ data: { heroNews, news }}) {
-    const _heroNews = heroNews && heroNews[0]
-    const _news = news && news.slice(1,4)
+    heroNews = heroNews && heroNews[0]
     return {
-      thumbnail: _heroNews && _heroNews.thumbnail,
-      title: _heroNews && _heroNews.title,
-      time: _heroNews && moment(_heroNews.time).format('HH[h]mm'),
-      news: (_news || []).map(n => ({
+      thumbnail: heroNews && heroNews.thumbnail,
+      title: heroNews && heroNews.title,
+      time: heroNews && moment(heroNews.time).format('HH[h]mm'),
+      news: (news || []).map(n => ({
         text: n.title,
         time: moment(n.time).format('HH[h]mm')
       }))
@@ -94,5 +100,10 @@ const withNews = graphql(newsQuery, {
   }
 })
 
+const TVNewsWithData = withNews(TVNews)
 
-export default withNews(TVNews)
+export default () => (
+  <CurrentPageProvider>
+    {currentPage => <TVNewsWithData offset={(currentPage - 1) * NEWS_PER_PAGE + 1} />}
+  </CurrentPageProvider>
+)
