@@ -14,5 +14,7 @@ export default moduxFactory(context => {
   rootContext = context
   context.add(paginationModux, 'tvProgramPagination')
   context.add(paginationModux, 'tvNewsPagination')
+  context.add(paginationModux, 'peoplePagination')
+  context.add(paginationModux, 'seriesPagination')
   return { initView: () => null }
 })()

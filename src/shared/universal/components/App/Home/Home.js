@@ -18,9 +18,17 @@ const Home = () => (
       </Cell>
     </Grid>
     <h2 style={{ textAlign: 'center' }}>À la une</h2>
-    <Headlines type={HEADLINES_TYPES.PEOPLE} />
+    <Headlines
+      type={HEADLINES_TYPES.PEOPLE}
+      section='peoplePagination'
+      pagesCount={2}
+      itemsPerPage={6}/>
     <h2 style={{ textAlign: 'center' }}>Actus séries</h2>
-    <Headlines type={HEADLINES_TYPES.SERIES}/>
+    <Headlines
+      type={HEADLINES_TYPES.SERIES}
+      section='seriesPagination'
+      pagesCount={4}
+      itemsPerPage={2}/>
   </div>
 )
 

@@ -11,6 +11,10 @@ import {
   Cell
 } from 'react-mdl'
 
+import * as root from '../../../../../../client/root'
+import Pager from '../../Pager'
+import paginationModux from '../../../../moduxes/pagination-list'
+
 
 const Headline = ({
   thumbnail,
@@ -64,7 +68,11 @@ HeroHeadline.fragments = {
 
 const Headlines = ({
   heroHeadline,
-  headlines
+  headlines,
+  pagesCount,
+  currentPage,
+  goToNextPage,
+  goToPreviousPage
 }) => (
   <div>
     { heroHeadline && <HeroHeadline {...heroHeadline} /> }
@@ -74,16 +82,23 @@ const Headlines = ({
           <Headline {...headline}/>
         </Cell>
       ))}
+      <Cell col={12} style={{ textAlign: 'right' }}>
+        <Pager
+          pagesCount={pagesCount}
+          currentPage={currentPage}
+          goToNextPage={goToNextPage}
+          goToPreviousPage={goToPreviousPage}/>
+      </Cell>
     </Grid>
   </div>
 )
 
 const HEADLINES_QUERY = gql`
-  query HeadlineQuery($type: HeadlinesType!) {
-    heroHeadline: headlines(type: $type) {
+  query HeadlineQuery($type: HeadlinesType!, $offset: Int!, $limit: Int!) {
+    heroHeadline: headlines(type: $type, offset: 0, limit: 1) {
       ...HeroHeadline
     }
-    headlines: headlines(type: $type) {
+    headlines: headlines(type: $type, offset: $offset, limit: $limit) {
       ...Headline
     }
   }
@@ -91,10 +106,10 @@ const HEADLINES_QUERY = gql`
 
 
 const withHeadlines = graphql(HEADLINES_QUERY, {
-  options({ type }) {
+  options({ type, offset, itemsPerPage }) {
     return {
       pollInterval: 60000,
-      variables: { type },
+      variables: { type, offset, limit: itemsPerPage },
       fragments: [
         HeroHeadline.fragments.headline.fragments(),
         Headline.fragments.headline.fragments()
@@ -104,7 +119,7 @@ const withHeadlines = graphql(HEADLINES_QUERY, {
   props({ data: { loading, heroHeadline, headlines }}) {
     return {
       heroHeadline: heroHeadline ? heroHeadline[0] : {},
-      headlines: headlines ? headlines.slice(1,7) : []
+      headlines: headlines || []
     }
   }
 })
@@ -115,4 +130,20 @@ export const HEADLINES_TYPES = {
   PEOPLE: 'PEOPLE'
 }
 
-export default withHeadlines(Headlines)
+const HeadlinesWithData = withHeadlines(Headlines)
+
+export default ({ section, itemsPerPage, pagesCount, type }) => {
+  const { PagerRenderer } = root.getRootContext().getView(section)
+  return (
+    <PagerRenderer>
+      {paginationProps => (
+        <HeadlinesWithData
+          type={type}
+          offset={(paginationProps.currentPage - 1) * itemsPerPage}
+          itemsPerPage={itemsPerPage}
+          pagesCount={pagesCount}
+          {...paginationProps}/>
+      )}
+    </PagerRenderer>
+  )
+}
