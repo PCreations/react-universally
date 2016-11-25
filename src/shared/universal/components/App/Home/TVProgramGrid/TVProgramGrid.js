@@ -38,7 +38,7 @@ Program.fragments = {
 
 
 //root.getRootContext().add(paginationModux, 'tvProgramPagination')
-const PagerRenderer = root.getRootContext().getView('tvProgramPagination')
+const { PagerRenderer, CurrentPageProvider } = root.getRootContext().getView('tvProgramPagination')
 //const PagerRenderer = ({ children }) => children({})
 
 const TVProgramGrid = ({ programs }) => (
@@ -63,17 +63,20 @@ const TVProgramGrid = ({ programs }) => (
 )
 
 const primeTimeProgramsQuery = gql`
-  {
-    tonightPrograms {
+  query TonightProgramsPage($offset: Int!) {
+    tonightPrograms(offset: $offset) {
       ...Program
     }
   }
 `
 
 const withPrimeTimePrograms = graphql(primeTimeProgramsQuery, {
-  options: {
-    fragments: Program.fragments.program.fragments()
-  },
+  options: ({ offset }) => ({
+    fragments: Program.fragments.program.fragments(),
+    variables: {
+      offset
+    }
+  }),
   props({ data: { loading, tonightPrograms } }) {
     return {
       programs: (tonightPrograms || []).map(program => ({
@@ -86,5 +89,10 @@ const withPrimeTimePrograms = graphql(primeTimeProgramsQuery, {
   }
 })
 
+const TVProgramGridWithPrograms = withPrimeTimePrograms(TVProgramGrid)
 
-export default withPrimeTimePrograms(TVProgramGrid)
+export default () => (
+  <CurrentPageProvider>
+    {currentPage => <TVProgramGridWithPrograms offset={(currentPage - 1) * 6}/>}
+  </CurrentPageProvider>
+)

@@ -6,12 +6,16 @@ const Pager = ({
   currentPage,
   goToNextPage,
   goToPreviousPage
-}) => (
-  <div>
-    <IconButton name='keyboard_arrow_left' onClick={goToPreviousPage}/>
-    <span>{`${currentPage}/${pagesCount}`}</span>
-    <IconButton name='keyboard_arrow_right' onClick={goToNextPage}/>
-  </div>
-)
+}) => {
+  const isLastPage = currentPage === pagesCount
+  const isFirstPage = currentPage === 1
+  return (
+    <div>
+      <IconButton name='keyboard_arrow_left' onClick={isFirstPage ? null : goToPreviousPage} disabled={isFirstPage}/>
+      <span>{`${currentPage}/${pagesCount}`}</span>
+      <IconButton name='keyboard_arrow_right' onClick={isLastPage ? null : goToNextPage} disabled={isLastPage}/>
+    </div>
+  )
+}
 
 export default Pager

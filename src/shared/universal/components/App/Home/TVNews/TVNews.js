@@ -10,6 +10,10 @@ import {
   ListItem
 } from 'react-mdl'
 
+import * as root from '../../../../../../client/root'
+import Pager from '../../Pager'
+import paginationModux from '../../../../moduxes/pagination-list'
+
 
 const NewsList = ({
   news
@@ -24,20 +28,36 @@ const NewsList = ({
   </List>
 )
 
+
+const { PagerRenderer, CurrentPageProvider } = root.getRootContext().getView('tvNewsPagination')
+
 const TVNews = ({
   thumbnail,
   title,
   time,
   news
 }) => (
-  <Card shadow={1} style={{ width: '100%' }}>
-    <CardTitle expand style={{ color: '#fff', background: `url(${thumbnail}) center / cover`, height: '167px', textAlign: 'center' }}>
-      {time} - {title}
-    </CardTitle>
-    <CardText>
-      <NewsList news={news}/>
-    </CardText>
-  </Card>
+  <div>
+    <Card shadow={1} style={{ width: '100%' }}>
+      <CardTitle expand style={{ color: '#fff', background: `url(${thumbnail}) center / cover`, height: '167px', textAlign: 'center' }}>
+        {time} - {title}
+      </CardTitle>
+      <CardText>
+        <NewsList news={news}/>
+      </CardText>
+    </Card>
+    <div style={{ textAlign: 'right' }}>
+      <PagerRenderer>
+        {({ goToNextPage, goToPreviousPage, currentPage }) => (
+          <Pager
+            pagesCount={8}
+            currentPage={currentPage}
+            goToNextPage={goToNextPage}
+            goToPreviousPage={goToPreviousPage}/>
+        )}
+      </PagerRenderer>
+    </div>
+  </div>
 )
 
 const newsQuery = gql`

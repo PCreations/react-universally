@@ -13,5 +13,6 @@ global.getRootContext = getRootContext
 export default moduxFactory(context => {
   rootContext = context
   context.add(paginationModux, 'tvProgramPagination')
+  context.add(paginationModux, 'tvNewsPagination')
   return { initView: () => null }
 })()

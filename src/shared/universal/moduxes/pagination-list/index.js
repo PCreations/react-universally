@@ -71,7 +71,13 @@ export default moduxFactory(context => {
         })
       )(PaginationRenderer)
 
-      return Pagination
+      const CurrentPageProvider = connect(
+        state => ({
+          currentPage: selectors.getCurrentPage(state)
+        })
+      )(({ children, currentPage }) => children(currentPage))
+
+      return { PagerRenderer: Pagination, CurrentPageProvider }
     }
   }
 })
