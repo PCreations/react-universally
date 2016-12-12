@@ -7,8 +7,11 @@ import { createNetworkInterface, ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 import render from './render';
+import { createLocalNetworkInterface } from '../shared/localNetworkInterface';
 import App from '../shared/universal/components/App';
 import configureStore from '../client/configureStore';
+import schema from '../shared/schema';
+
 
 /**
  * An express middleware that is capabable of doing React server side rendering.
@@ -32,7 +35,7 @@ function universalReactAppMiddleware(request: $Request, response: $Response) {
 
   const client = new ApolloClient({
     ssrMode: true,
-    networkInterface: createNetworkInterface({ uri: `${process.env.NOW_URL}/graphql` })
+    networkInterface: createLocalNetworkInterface({ schema })
   });
 
   const store = configureStore(client.reducer())

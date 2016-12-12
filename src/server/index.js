@@ -17,12 +17,12 @@ import proxy from 'http-proxy-middleware';
 import universalMiddleware from './middleware/universalMiddleware';
 import { notEmpty } from '../shared/universal/utils/guards';
 
-import schema from './schema'
+import schema from '../shared/schema'
 
 global.window = {}
 global.window.addEventListener = function() {}
 
-const apiProxy = proxy({ target: process.env.API_HOST });
+const apiProxy = proxy({ target: 'http://api.fidji.lefigaro.fr', headers: { host:'api.fidji.lefigaro.fr' } });
 
 const appRootPath = appRoot.toString();
 
@@ -37,8 +37,7 @@ app.use(hpp());
 
 app.use(useragent.express());
 
-app.use('/graphql', apiProxy);
-app.use('/graphiql', apiProxy);
+app.use('/api', apiProxy);
 
 // Content Security Policy
 app.use(helmet.contentSecurityPolicy({

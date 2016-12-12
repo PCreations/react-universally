@@ -10,7 +10,6 @@ const Home = () => (
     <Grid>
       <Cell col={8}>
         <h2 style={{ textAlign: 'center' }}>Programme TV</h2>
-        <TVProgramGrid/>
       </Cell>
       <Cell col={4}>
         <h3 style={{ textAlign: 'center' }}>Actu TV en continu</h3>

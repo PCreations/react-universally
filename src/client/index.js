@@ -6,13 +6,15 @@ import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router';
 import ReactHotLoader from './components/ReactHotLoader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import { ApolloClient, createBatchingNetworkInterface } from 'apollo-client';
+import { ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { Client } from 'subscriptions-transport-ws';
 import { print } from 'graphql-tag/printer';
 
+import { createLocalNetworkInterface } from '../shared/localNetworkInterface';
 import configureStore from './configureStore'
 import App from '../shared/universal/components/App';
+import schema from '../shared/schema';
 
 
 const wsClient = new Client('ws://localhost:8080');
@@ -31,13 +33,7 @@ const addGraphQLSubscriptions = (networkInterface, wsClient) => Object.assign(ne
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
 
-const networkInterface = createBatchingNetworkInterface({
-  uri: `${process.env.NOW_URL}/graphql`,
-  opts: {
-    credentials: 'same-origin',
-  },
-  batchInterval: 50
-})
+const networkInterface = createLocalNetworkInterface({ schema })
 
 const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
   networkInterface,
