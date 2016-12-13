@@ -58,10 +58,10 @@ function App() {
                 expandableIcon="search"/>
           </HeaderRow>
           <Match
-            pattern="/agenda/:date"
+            pattern="/agenda/:year/:month"
             render={routerProps => (
-              <CodeSplit module={System.import('../Agenda/MonthHeaderTabs')}>
-                { MonthHeaderTabs => MonthHeaderTabs && <MonthHeaderTabs {...routerProps} /> }
+              <CodeSplit module={System.import('../../../moduxRoot')}>
+                { moduxRoot => moduxRoot && <moduxRoot.view.MonthHeaderTabs {...routerProps} /> }
               </CodeSplit>
             )}/>
         </Header>
@@ -83,7 +83,7 @@ function App() {
             }/>
 
           <Match
-            pattern="/agenda/:date"
+            pattern="/agenda/:year/:month"
             render={routerProps =>
               <CodeSplit module={System.import('../Agenda')}>
                 { Agenda => Agenda && <Agenda {...routerProps} /> }

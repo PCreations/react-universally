@@ -1,7 +1,6 @@
 import React from 'react'
 import { Card, CardTitle, CardText, Tooltip } from 'react-mdl';
-import gql from 'graphql-tag';
-import Fragment from 'graphql-fragments';
+h
 import CSSModules from 'react-css-modules';
 
 import style from './style.css'

@@ -3,13 +3,15 @@
 
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import ReactHotLoader from './components/ReactHotLoader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
-import App from '../shared/universal/components/App';
+import configureStore from '../shared/universal/configureStore';
+import App from '../shared/universal/apps/App';
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
@@ -23,6 +25,8 @@ const client = new ApolloClient({
   }),
   initialState: window.__APOLLO_STATE__
 });
+
+const store = configureStore(client.reducer());
 
 if ('serviceWorker' in navigator) {
   // Your service-worker.js *must* be located at the top-level directory relative to your site.
@@ -69,7 +73,7 @@ function renderApp(TheApp) {
   render(
     <ReactHotLoader>
       <BrowserRouter>
-        <ApolloProvider client={client}>
+        <ApolloProvider store={store} client={client}>
           <TheApp/>
         </ApolloProvider>
       </BrowserRouter>
@@ -84,8 +88,8 @@ if (process.env.NODE_ENV === 'development' && module.hot) {
   module.hot.accept('./index.js');
   // Any changes to our App will cause a hotload re-render.
   module.hot.accept(
-    '../shared/universal/components/App',
-    () => renderApp(require('../shared/universal/components/App').default)
+    '../shared/universal/apps/App',
+    () => renderApp(require('../shared/universal/apps/App').default)
   );
 }
 

@@ -7,7 +7,7 @@ import { createNetworkInterface, ApolloClient } from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 import render from './render';
-import App from '../shared/universal/components/App';
+import App from '../shared/universal/apps/App';
 
 /**
  * An express middleware that is capabable of doing React server side rendering.
